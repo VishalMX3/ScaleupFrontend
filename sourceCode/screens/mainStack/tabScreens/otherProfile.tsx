@@ -118,17 +118,6 @@ const OtherProfile = () => {
     }, [allData?.isFollowing])
 
 
-    /*
-    const postComment = (data) => {
-        addComment(data).then((res) => {
-            // Fetch the profile data again to update the UI
-            get();
-            setComment(false); // Assuming you're using a state named `setComment` to manage the comment modal visibility
-            Show_Toast(res?.data?.message);
-        });
-    };
-    */
-
     const postComment = (data) => {
         console.log('Data Sent for Comment', data);
         addComment(data).then((res) => {
@@ -151,7 +140,7 @@ const OtherProfile = () => {
       //  console.log('smeVerify value:', item.smeVerify);
         return (
             <View
-                style={[styles.postStyle, styles.iosShadow]}>
+                style={[styles.postStyle, styles.iosShadow], { marginTop: '0' }}>
                 <TouchableOpacity style={styles.info}
                     onPress={() => { }}
                 >
@@ -287,11 +276,7 @@ const OtherProfile = () => {
                         )
                     })
                     }
-                    {/* {item?.isVerified &&
-                        <Image
-                            source={require('../../../assets/images/security-user.png')}
-                        />
-                    } */}
+
                 </View>
                 <View style={styles.line} />
                 <View style={styles.info}>
@@ -335,23 +320,6 @@ const OtherProfile = () => {
         }
     }
 
-    
-  /*  const likeThisPost = (item) => {
-        console.log(pofileData.user.username)
-        console.log(item.likes)
-        // Default item.likes to an empty array if it's undefined
-        const likes = Array.isArray(item.likes.users) ? item.likes.users : [];
-        console.log(likes); // Now we know likes is defined and is an array
-        if (likes.includes(pofileData?.user?.username)) {
-            sendUnLikeRequest(item.contentId).then((res) => {
-                // Your logic after sending unlike request
-            });
-        } else {
-            sendLikeRequest(item.contentId).then(() => {
-                // Your logic after sending like request
-            });
-        }
-    };*/
     
     const likeThisPost = (item) => {
         if (item?.likes.users.includes(pofileData?.user?.username)) {
@@ -403,8 +371,8 @@ const OtherProfile = () => {
                 imge={require('../../../assets/images/arrow-left.png')}
                 button={() => { wantToBlock() }}
             />
-            <ScrollView style={{ flex: 1 }} nestedScrollEnabled={true}>
-                <View style={[styles.info, { paddingHorizontal: 15 }]}>
+           
+                <View style={[styles.info, { paddingHorizontal: 10 }]}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         {allData?.profilePicture ?
                             <Image
@@ -415,16 +383,24 @@ const OtherProfile = () => {
                             :
                             <View style={styles.profileImg}>
                                     <Text style={[styles.boldStyle, { paddingLeft: 0 }]}>{allData?.usernam?.substring(0, 2)?.toUpperCase()}</Text>
+                                    
                                 </View>
                         }
                             <View style={[styles.nameType, {flex: 1, marginLeft: 10 }]}>
-                                <Text style={[styles.boldStyle, { marginVertical: 0.3 }]}>
-                                    {allData?.firstname + " " + allData?.lastname}
+                                <Text style={[styles.boldStyle, { marginVertical: 1.5 }]}>
+                                    {allData?.firstname + " " + allData?.lastname}  {allData?.role === "SME" && <Image
+                        resizeMode='center'
+                        tintColor={'#F6BE00'}
+                        source={require('../../../assets/images/medal-star.png')}
+                        style={{ height: 25, width: 25, marginTop: -5 }}
+                    />}
                                 </Text>
-                                <Text style={[styles.smalltxt, { marginVertical: 0.3 }]}>
+
+
+                                <Text style={[styles.smalltxt, { marginVertical: 1.5 }]}>
                                     {allData?.email}
                                 </Text>
-                                <Text style={[styles.bioAbout, { marginVertical: 0.3 }]}>
+                                <Text style={[styles.bioAbout, { marginVertical: 1.5 }]}>
                                     {allData?.bioAbout}
                                 </Text>
                             </View>
@@ -436,7 +412,7 @@ const OtherProfile = () => {
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    paddingHorizontal: 15, marginTop: 30
+                    paddingHorizontal: 15, marginTop: 10
                 }}>
 
                     <FlatList
@@ -450,32 +426,7 @@ const OtherProfile = () => {
 
                 </View>
 
-                <View style={{
-                    marginTop: 15, flexDirection: 'row',
-                    paddingHorizontal: 20, alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 15
-                }}>
-                    <TouchableOpacity
-                        onPress={() => { foloowThisUser() }}
-                    >
-                        <ImageBackground
-                            source={require('../../../assets/images/folow_button_.png')}
-                            style={[{ height: 47, width: 144, alignItems: 'center', justifyContent: 'center' }]}>
-                            <Text style={[styles.boldStyle,
-                            { color: ColorCode.yellowText, marginHorizontal: 20 }]}>{button}</Text>
-                        </ImageBackground>
-                    </TouchableOpacity>
-
-
-
-                    {allData?.role === "SME" && <Image
-                        resizeMode='contain'
-                        tintColor={'#F6BE00'}
-                        source={require('../../../assets/images/medal-star.png')}
-                        style={{ height: 50, width: 50, marginTop: -5 }}
-                    />}
-                </View>
+                
                 <View style={[styles.cards, { flexDirection: 'row', justifyContent: 'space-between' }]}>
                     <View style={{ alignItems: 'center', justifyContent: 'space-between' }}>
                         <Text style={[styles.smalltxt, { color: ColorCode.black_Color, fontSize: 18 }]}>{allData?.totalPosts}</Text>
@@ -490,11 +441,25 @@ const OtherProfile = () => {
                         <Text style={[styles.smalltxt, { color: ColorCode.black_Color, fontSize: 18 }]}>{allData?.followers?.length}</Text>
                         <Text style={[styles.smalltxt,]}>Followers</Text>
                     </View>
+                    
+                    <View style={{
+                    marginTop: 15, flexDirection: 'row',
+                    paddingHorizontal: 20, alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: 20
+                }}>
+                    <TouchableOpacity
+                        onPress={() => { foloowThisUser() }}
+                    >
+                        <ImageBackground
+                            source={require('../../../assets/images/folow_button_.png')}
+                            style={[{ height: 35, width: 120, alignItems: 'center', justifyContent: 'center',paddingHorizontal:2 }]}>
+                            <Text style={[styles.boldStyle,
+                            { color: ColorCode.yellowText, marginHorizontal: 20 }]}>{button}</Text>
+                        </ImageBackground>
+                    </TouchableOpacity>
 
-                    <Image
-                        resizeMode='contain'
-                        source={require('../../../assets/images/group_p.png')}
-                    />
+                </View>
 
                 </View>
 
@@ -516,7 +481,7 @@ const OtherProfile = () => {
                 </View>
 
 
-            </ScrollView>
+           
 
             {showComment &&
                 <CommentModal

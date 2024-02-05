@@ -510,7 +510,6 @@ const Profile = () => {
                 <FlatList
                     scrollEnabled
                     showsVerticalScrollIndicator={false}
-                    nestedScrollEnabled={true}
                     data={pofileData?.userContent}
                     renderItem={renderItem}
                     keyExtractor={(item, index) => index.toString()}
