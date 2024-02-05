@@ -60,16 +60,12 @@ const ValidateContent = () => {
 
 */
 
-
-
 useEffect(() => {
     fetchContent();
-    // Adding fetchContent as a dependency here could cause an infinite loop if fetchContent changes on every render.
-    // Ensure fetchContent is stable and does not change between renders, or remove dependencies that cause it to change.
-  }, []); // Ensure this effect only runs once after mount
+      }, []); // Ensure this effect only runs once after mount
   
   const fetchContent = async () => {
-    console.log(`Attempting to fetch content for page ${page}, hasMore: ${hasMore}, isFetchingMore: ${isFetchingMore}`);
+    //console.log(`Attempting to fetch content for page ${page}, hasMore: ${hasMore}, isFetchingMore: ${isFetchingMore}`);
   
     if (!hasMore || isFetchingMore) return;
   

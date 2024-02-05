@@ -35,7 +35,7 @@ const Profile = () => {
     const [hasMore, setHasMore] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
 
-    
+    /*
     useEffect(() => {
         dispatch(setLoading(true))
         getMyProfile().then((res) => {
@@ -59,10 +59,32 @@ const Profile = () => {
         }
     }, [isFocused]);
     
-      
+      */
 
     // console.log(pofileData?.user?.bio,"pofileData=====>")
 
+
+    useEffect(() => {
+        const initFetch = async () => {
+          dispatch(setLoading(true));
+          try {
+            const res = await getMyProfile(1, 10); // Assume this fetches the first page with 10 items
+            setProfileData(res?.data);
+            setProfileDats(res?.data?.user?.profilePicture);
+            setPage(2); // Prepare for next page fetch
+            setHasMore(true); // Assuming there's more data until proven otherwise
+          } catch (error) {
+            console.error('Error fetching profile data:', error);
+          } finally {
+            dispatch(setLoading(false));
+          }
+        };
+      
+        if (isFocused) {
+          initFetch();
+        }
+      }, [isFocused]); // Depend on isFocused to re-trigger when coming back to the screen
+      
      const loadMoreItems = () => {
         if (loadingMore || !hasMore) {
             console.log('Early return:', { loadingMore, hasMore });
@@ -394,10 +416,10 @@ const Profile = () => {
             <TabHeader myHeading={"Profile"}
                 go={() => navigation.goBack()}
                 imge={require('../../../assets/images/arrow-left.png')} />
-            <ScrollView style={{ flex: 1 }} nestedScrollEnabled={true}
-                showsVerticalScrollIndicator={false}>
+            
                 <View style={styles.cards}>
-                    <View style={[styles.info, { paddingHorizontal: 15 }]}>
+                    <View style={[styles.info, { paddingHorizontal: 5 }]}>
+                        
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
 
                             {profile ?
@@ -410,7 +432,7 @@ const Profile = () => {
                                     <Text style={[styles.boldStyle, { paddingLeft: 0 }]}>{pofileData?.user?.firstname + " " + pofileData?.user?.lastname?.substring(0, 2).toUpperCase()}</Text>
                                 </View>
                             }
-                            <View style={[styles.nameType, { marginLeft: 30 }]}>
+                            <View style={[styles.nameType, { marginLeft: 10 }]}>
                                 <Text style={styles.boldStyle}>{pofileData?.user?.firstname + " " + pofileData?.user?.lastname}</Text>
                                
                                 <Text style={styles.smalltxt}>{pofileData?.user?.email}</Text>
@@ -429,33 +451,11 @@ const Profile = () => {
                                     />
                                 </TouchableOpacity>
 
-                                {/* <TouchableOpacity
-                                    onPress={() => { logout() }}
-                                    style={{ height: 50, }}>
-                                    <Image
-                                        source={require('../../../assets/images/Logout.png')}
-                                    />
-                                </TouchableOpacity> */}
                             </View>
 
 
                         </View>
                     </View>
-                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 30 }}>
-                        <TouchableOpacity style={styles.button}
-                            onPress={() => { navigation.navigate('BlockList') }}>
-                            <Text style={styles.text}>{"Photography"}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button}>
-                            <Text style={styles.text}>{"Football"}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button}>
-                            <Text style={styles.text}>{"Dancing"}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button}>
-                            <Text style={styles.text}>{"Hiking"}</Text>
-                        </TouchableOpacity>
-                    </View> */}
 
                     <View style={[styles.reelsStyle,]}>
                         <FlatList
@@ -467,9 +467,9 @@ const Profile = () => {
                             renderItem={renderItem_didNumber}
                             keyExtractor={(item, index) => index.toString()} />
                     </View>
-                    <View style={styles.line} />
-                    <Text style={[styles.smalltxt, { marginTop: 10 }]}>{pofileData?.user?.bio?.bioAbout}</Text>
-                    <View style={[{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 20 }]}>
+                    <Text style={[styles.smalltxt, { marginTop: -15 }]}>{pofileData?.user?.bio?.bioAbout}</Text>
+                    <View style={styles.line} />             
+                    <View style={[{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 5 }]}>
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                             <Image
                                 resizeMode='contain'
@@ -500,7 +500,7 @@ const Profile = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ flexDirection: 'row', marginTop: 20, paddingHorizontal: 10 }}>
+                <View style={{ flexDirection: 'row', marginTop: 10, paddingHorizontal: 10 }}>
                 <Text style={[styles.smalltxt, { fontSize: 18, color: ColorCode.black_Color }]}>Badge :</Text>
                 <Text style={[styles.smalltxt, { fontSize: 16, }]}>
                     {pofileData?.user?.role === 'Subject Matter Expert' ? pofileData?.user?.role : pofileData?.user?.badges}
@@ -515,12 +515,12 @@ const Profile = () => {
                     renderItem={renderItem}
                     keyExtractor={(item, index) => index.toString()}
                     onEndReached={loadMoreItems}
-                    onEndReachedThreshold={0.8} // Trigger the call when half of the last item is visible
+                    onEndReachedThreshold={0.5} // Trigger the call when half of the last item is visible
                     ListFooterComponent={loadingMore ? <ActivityIndicator size="large" color="#0000ff" /> : null}
                     />
 
                 </View>
-            </ScrollView>
+           
 
             {showImage &&
                 <FullImageModal
@@ -581,6 +581,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: "center",
+        paddingHorizontal: 15,
 
     },
     profileImg: {
