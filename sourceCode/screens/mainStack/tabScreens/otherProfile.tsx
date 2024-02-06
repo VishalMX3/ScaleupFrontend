@@ -412,7 +412,7 @@ const OtherProfile = () => {
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    paddingHorizontal: 15, marginTop: 10
+                    paddingHorizontal: 15, marginTop: 15
                 }}>
 
                     <FlatList
@@ -427,7 +427,7 @@ const OtherProfile = () => {
                 </View>
 
                 
-                <View style={[styles.cards, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+                <View style={[styles.cards, { flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }]}>
                     <View style={{ alignItems: 'center', justifyContent: 'space-between' }}>
                         <Text style={[styles.smalltxt, { color: ColorCode.black_Color, fontSize: 18 }]}>{allData?.totalPosts}</Text>
                         <Text style={[styles.smalltxt,]}>Posts</Text>
