@@ -35,8 +35,8 @@ local.properties
 .cxx/
 *.keystore
 !debug.keystore
-sourceCode/utils/
-sourceCode/naviagtion/
+
+
 # node.js
 #
 node_modules/
