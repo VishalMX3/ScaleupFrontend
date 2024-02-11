@@ -135,11 +135,24 @@ useEffect(()=>{
     };
 
     const updateBasicUserDetail = () => {
-        
         const formData = new FormData();
-        // var filename = generateRandomString(10) + '.jpg';
-        const data = { name: 'file.jpg', uri: selectedImage?.uri?.uri, type: "image/png" }
-        formData.append('profilePicture', data);
+        // Check if a new image has been selected
+        if (selectedImage && selectedImage.uri) {
+            // Assume selectedImage.uri is directly accessible and correctly points to the new image's URI
+            // Adjust the object structure as needed depending on how your image picker returns the selected image
+            const imageName = 'file.jpg'; // You might want to use a more specific name or include a timestamp
+            const imageType = "image/jpeg"; // Adjust based on the actual image type
+            const imageUri = selectedImage.uri;
+            
+            // Append the new profile picture to formData only if a new picture has been selected
+            formData.append('profilePicture', {
+                name: imageName,
+                type: imageType,
+                uri: Platform.OS === 'android' ? imageUri : imageUri.replace('file://', ''), // Adjust URI format for iOS
+            });
+        }
+    
+        // Append other details to formData
         formData.append('location', location);
         formData.append('dateOfBirth', moment(selectedStartDate.toString()).format('YYYY-MM-DD'));
         formData.append('bioAbout', about);
