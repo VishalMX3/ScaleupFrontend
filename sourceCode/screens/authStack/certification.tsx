@@ -358,6 +358,7 @@ const Certification = () => {
                                 name={"save"} btnTextStyle={{ color: ColorCode.blue_Button_Color, }}
                                 button={{ width: '44%', backgroundColor: ColorCode.white_Color, borderColor: ColorCode.blue_Button_Color, borderWidth: 1 }} />
                             <OpacityButton
+                            
                                 pressButton={() => { certificationDetailMore() }}
                                 name={"Add More"} btnTextStyle={{ color: ColorCode.yellowText, }}
                                 button={{ width: '44%' }} />
