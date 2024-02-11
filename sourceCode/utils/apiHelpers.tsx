@@ -222,7 +222,6 @@ export const registerApi = (payload) => {
       baseURL: BASE_URL,
       method: GET_METHOD,
       url:  BLOCKUSERLIST,
-    
     });
   };
 
