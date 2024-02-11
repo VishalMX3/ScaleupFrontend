@@ -253,6 +253,8 @@ const WorkDetails = () => {
     }
 
 
+
+    
     useEffect(() => {
         setPosition(pofileData?.user?.workExperience[0]?.position)
         setCompany(pofileData?.user?.workExperience[0]?.company)
