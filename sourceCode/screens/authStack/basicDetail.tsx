@@ -39,17 +39,17 @@ const BasicDetail = (props) => {
     // console.log(selectedImage, 'selectedImage======>', data)
     const { pofileData } = useSelector<any, any>((store) => store.sliceReducer);
     const { loading } = useSelector<any, any>((store) => store.sliceReducer);
-   
+
     //  console.log("pofileData=====>",pofileData?.user?.dateOfBirth,"pofileData=====>",intrust)
 
 
-useEffect(()=>{
-    setSelectedImage(pofileData?.user?.profilePicture)
-    setLocation(pofileData?.user?.location ? pofileData?.user?.location : "")
-    setIntrust(pofileData?.user?.bio?.bioInterests?.join(', '))
-    setAbout(pofileData?.user?.bio?.bioAbout)
-    setselectedStartDate(moment(pofileData?.user?.dateOfBirth?.toString()).format('YYYY-MM-DD'))
-},[])
+    useEffect(() => {
+        setSelectedImage(pofileData?.user?.profilePicture)
+        setLocation(pofileData?.user?.location ? pofileData?.user?.location : "")
+        setIntrust(pofileData?.user?.bio?.bioInterests?.join(', '))
+        setAbout(pofileData?.user?.bio?.bioAbout)
+        setselectedStartDate(moment(pofileData?.user?.dateOfBirth?.toString()).format('YYYY-MM-DD'))
+    }, [])
 
 
     const showAlert = () => {
@@ -181,7 +181,7 @@ useEffect(()=>{
 
     return (
         <SafeAreaView style={styles.main}>
-             {loading && <Loader />}
+            {loading && <Loader />}
             <StatusBar
                 barStyle={'dark-content'}
                 animated={true}
@@ -194,7 +194,7 @@ useEffect(()=>{
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 15, }}>
 
                         <TouchableOpacity
-                        onPress={()=>{navigation.goBack()}}
+                            onPress={() => { navigation.goBack() }}
                         >
                             <Image
                                 tintColor={'black'}
@@ -202,7 +202,7 @@ useEffect(()=>{
                             />
                         </TouchableOpacity>
 
-                        <Text style={[styles.myText, { alignSelf: 'center',marginRight:15}]}>{"Basic  Details"}</Text>
+                        <Text style={[styles.myText, { alignSelf: 'center', marginRight: 15 }]}>{"Basic  Details"}</Text>
                         <View></View>
                     </View>
                     <Text style={styles.txt}>{Strings.FillOut}</Text>
@@ -211,33 +211,29 @@ useEffect(()=>{
 
                         <Image
                             resizeMode='cover'
-                            style={{ marginBottom: -20, height: '100%', width:'100%', borderRadius: 30 }}
+                            style={{ marginBottom: -20, height: '100%', width: '100%', borderRadius: 30 }}
                             source={selectedImage?.uri ? selectedImage?.uri :
-                                selectedImage ? {uri:selectedImage} :
-                                require('../../assets/images/personalcard.png')} />
+                                selectedImage ? { uri: selectedImage } :
+                                    require('../../assets/images/personalcard.png')} />
                         <Image
                             style={{ marginLeft: 70, bottom: -5 }}
                             source={require('../../assets/images/EditSquare.png')}
                         />
                     </TouchableOpacity>
-                    <Text style={[styles.myText, { fontSize: 16, marginTop: 20 }]}>{name != '' ?name : pofileData?.user?.username  }</Text>
-                    <View style={[styles.inputView, { height: hp(35) }]}>
+                    <Text style={[styles.myText, { fontSize: 16, marginTop: 20 }]}>{name != '' ? name : pofileData?.user?.username}</Text>
+                    <View style={[styles.inputView, { height: '50%', }]}>
                         <InputText
                             length={16}
                             onChange={(text) => { setLocation(text) }}
                             value={location}
                             placeholder={"location"}
-                             />
+                            style={{ maginTop: 15 }}
+                        />
 
-                        {/* <InputText
-                            length={16}
-                            onChange={(text) => { setDate(text) }}
-                            value={date}
-                            keyboardType={'number-pad'}
-                            placeholder={"Date of Birth"} /> */}
+                        
                         <TouchableOpacity
                             onPress={() => { openCalenderPicker() }}
-                            style={[styles.calender, { justifyContent: 'space-between' }]}
+                            style={[styles.calender, { justifyContent: 'space-between',marginVertical:10 }]}
                             activeOpacity={1}>
                             <Text style={{
                                 fontFamily: 'ComicNeue-Bold',
@@ -245,41 +241,51 @@ useEffect(()=>{
                                 color: 'grey'
                             }}>{selectedStartDate != null ?
                                 moment(selectedStartDate.toString()).format('YYYY-MM-DD ') :
-                                
-                                 "Date of Birth"}</Text>
+
+                                "Date of Birth"}</Text>
                             <Image
                                 style={{ transform: [{ rotate: '90deg' }], marginRight: 10 }}
                                 source={require('../../assets/images/ArrowRight.png')}
                             />
                         </TouchableOpacity>
+
                         <InputText
-                            onChange={(text) => {setIntrust(text) }}
+                            style={{ maginTop: 15 }}
+                            onChange={(text) => { setIntrust(text) }}
                             value={intrust}
                             placeholder={"Enter interests comma separated "} />
 
                         {intrust.length > 0 &&
-                            <View style={{
-                                flexDirection: 'row',
-                                 paddingHorizontal: 15
-                            }}>
+                            <ScrollView
+                                horizontal
+                                contentContainerStyle={{alignItems:'center'}}
+                                style={{
+                                   
+                                    paddingHorizontal: 15,  height: 30,
+                                }}>
                                 {intrust.split(',').map((interest, index) => (
                                     <TouchableOpacity key={index} style={{
-                                        padding: 5,
-                                        margin: 5, borderWidth: 1, borderRadius: 5
-                                    }}>
+                                        borderWidth: 1, borderRadius: 5, height: 30,
+                                         marginLeft: 5, paddingHorizontal: 10,
+                                          alignItems: 'center', justifyContent: 'center'}}>
                                         <Text>{interest.trim()}</Text>
                                     </TouchableOpacity>
                                 ))}
-                            </View>}
+                            </ScrollView>}
 
 
                         <InputText
-
+                            style={{ maginTop: 15 }}
                             onChange={(text) => { setAbout(text) }}
                             value={about}
                             placeholder={"About You"} />
+
                     </View>
+               
+               
                 </ScrollView>
+
+
                 <View style={styles.inputView}>
                     <OpacityButton
                         pressButton={() => {
@@ -298,23 +304,25 @@ useEffect(()=>{
                         animationIn={'zoomIn'} animationOut={'zoomOut'} backdropOpacity={0.1}
                         onBackdropPress={() => setshowcalenderPicker(false)} transparent={true}>
                         <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                            <View style={{ height: hp(45), backgroundColor: 'white', justifyContent: 'center',
-                             alignItems: 'center', borderRadius: 10, elevation: 10 }}>
-                                  <TouchableOpacity
-                                activeOpacity={1}
-                                onPress={() => setshowcalenderPicker(false)}
+                            <View style={{
+                                height: hp(45), backgroundColor: 'white', justifyContent: 'center',
+                                alignItems: 'center', borderRadius: 10, elevation: 10
+                            }}>
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    onPress={() => setshowcalenderPicker(false)}
 
-                                style={{
-                                    height: 50, width: 50,
-                                    position: 'absolute', backgroundColor: 'white',
-                                    zIndex: 1, alignItems: 'center',
-                                    justifyContent: 'center', borderRadius: 25,
-                                     left: 0,top:-0
-                                }}>
-                                <Image
-                                    source={require('../../assets/images/close_24px.png')}
-                                />
-                            </TouchableOpacity>
+                                    style={{
+                                        height: 50, width: 50,
+                                        position: 'absolute', backgroundColor: 'white',
+                                        zIndex: 1, alignItems: 'center',
+                                        justifyContent: 'center', borderRadius: 25,
+                                        left: 0, top: -0
+                                    }}>
+                                    <Image
+                                        source={require('../../assets/images/close_24px.png')}
+                                    />
+                                </TouchableOpacity>
                                 <CalendarPicker width={350}
                                     todayBackgroundColor={ColorCode.blue_Button_Color}
                                     todayTextStyle={{ color: ColorCode.white_Color }}
@@ -358,8 +366,6 @@ const styles = StyleSheet.create({
 
     },
     inputView: {
-        height: hp(8),
-        justifyContent: 'space-between',
         marginTop: 20,
         marginBottom: 10
 

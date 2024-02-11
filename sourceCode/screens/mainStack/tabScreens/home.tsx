@@ -48,7 +48,7 @@ const Home = () => {
       );
 
       const homePageData = (page, pageSize) => {
-        console.log("Fetching data for Page:", page);
+        console.log(pageSize,"Fetching data for Page:", page);
         setRefreshing(true);
         dispatch(setLoading(true));
         getHomePageData(page, pageSize)

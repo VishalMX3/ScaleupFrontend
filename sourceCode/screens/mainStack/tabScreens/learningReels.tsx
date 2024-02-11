@@ -185,34 +185,22 @@ import {
                             return (
                                 <Text
                                     numberOfLines={2}
-                                    style={[styles.smalltxt, {
-                                        textAlign: 'left',
-                                    }]}>{item}</Text>
-                            )
+                                    style={[styles.smalltxt, {textAlign: 'left', }]}>{item}</Text>)
                         })
                         }
                     </View>
                     <View style={{ width: '100%' }}>
                     <Text
                         numberOfLines={captionLine}
-                        style={[styles.smalltxt, {
-                            textAlign: 'left',
-                        }]}
-                    >{item?.captions}</Text>
-
+                        style={[styles.smalltxt, {textAlign: 'left',}]}>{item?.captions}</Text>
                     {item?.captions.length > 38 &&
                         <TouchableOpacity onPress={() => { captionLine === 2 ? setCaptionLine(100) : setCaptionLine(2) }}
                             style={{}}>
                             <Text style={[styles.smalltxt, { color: ColorCode.white_Color }]}>{captionLine === 2 ? 'see more' : 'show less'}</Text>
-                        </TouchableOpacity>
-                    }
+                        </TouchableOpacity>}
                     </View>
                 </View>
-
             </View>
-
-
-
         )
     }
 

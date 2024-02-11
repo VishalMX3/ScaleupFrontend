@@ -378,23 +378,14 @@ const Certification = () => {
                             onChange={(text) => { setCourceTitle(text) }}
                             value={CourceTitle}
                             placeholder={"Title"}
-                            style={{ marginTop: 15 }}
-                        />
+                            style={{ marginTop: 15 }}/>
+                            
                         <InputText
                             onChange={(text) => { setInstitution(text) }}
                             value={institution}
                             placeholder={"Institution"}
-                            style={{ marginTop: 15 }}
-                        />
-
-                        {/* <InputText
-                            onChange={(text) => { setCompletionDate(text) }}
-                            value={completionDate}
-                            keyboardType={'number-pad'}
-                            placeholder={"Completion Date"}
-                            style={{ width: '44%', alignSelf: 'flex-start', marginLeft: 20, marginTop: 15 }} />
-                        */}
-                       
+                            style={{ marginTop: 15 }}/>
+                          
                        <TouchableOpacity
                             onPress={() => { openCalenderPicker("completion") }}
                             style={[styles.calender, { justifyContent: 'space-between' }]}
@@ -409,8 +400,7 @@ const Certification = () => {
                                 "Date of Birth"}</Text>
                             <Image
                                 style={{ transform: [{ rotate: '90deg' }], marginRight: 10 }}
-                                source={require('../../assets/images/ArrowRight.png')}
-                            />
+                                source={require('../../assets/images/ArrowRight.png')}/>
                         </TouchableOpacity>
                        
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingVertical: 20 }}>
