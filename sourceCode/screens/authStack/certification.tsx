@@ -242,13 +242,29 @@ const Certification = () => {
     }
 
     useEffect(() => {
-        setTitle(pofileData?.user?.certifications[0]?.title)
-        setIssuer(pofileData?.user?.certifications[0]?.issuer)
-        setIssuedate(pofileData?.user?.certifications[0].issueDate)
-        setCourceTitle(pofileData?.user?.courses[0]?.title)
-        setInstitution(pofileData?.user?.courses[0]?.institution)
-        setCompletionDate(pofileData?.user?.courses[0]?.completionDate)
-    }, [])
+        if (pofileData?.user?.certifications && pofileData.user.certifications.length > 0) {
+            const certification = pofileData.user.certifications[0];
+            setTitle(certification.title || '');
+            setIssuer(certification.issuer || '');
+            setIssuedate(certification.issueDate ? moment(certification.issueDate).format('YYYY-MM-DD') : '');
+        } else {
+            setTitle('');
+            setIssuer('');
+            setIssuedate('');
+        }
+    
+        if (pofileData?.user?.courses && pofileData.user.courses.length > 0) {
+            const course = pofileData.user.courses[0];
+            setCourceTitle(course.title || '');
+            setInstitution(course.institution || '');
+            setCompletionDate(course.completionDate ? moment(course.completionDate).format('YYYY-MM-DD') : '');
+        } else {
+            setCourceTitle('');
+            setInstitution('');
+            setCompletionDate('');
+        }
+    }, [pofileData]);
+    
 
 
     return (

@@ -135,11 +135,19 @@ const EducationDetail = () => {
 
 
     useEffect(() => {
-        setDegee(pofileData?.user?.education[0].degree)
-        setSchool(pofileData?.user?.education[0].school)
-        setDate(pofileData?.user?.education[0].graduationYear)
-        setField(pofileData?.user?.education[0].fieldOfStudy)
-    }, [])
+        if (pofileData?.user?.education && pofileData.user.education.length > 0) {
+            setDegee(pofileData.user.education[0].degree);
+            setSchool(pofileData.user.education[0].school);
+            setDate(moment(pofileData.user.education[0].graduationYear).format('YYYY-MM-DD'));
+            setField(pofileData.user.education[0].fieldOfStudy);
+        } else {
+            // Set default or empty values if no education data is available
+            setDegee('');
+            setSchool('');
+            setDate('');
+            setField('');
+        }
+    }, [pofileData]);
 
 
     const onDateChange = (date: any) => {
@@ -313,7 +321,6 @@ const EducationDetail = () => {
         </SafeAreaView>
 
     )
-
 }
 
 
