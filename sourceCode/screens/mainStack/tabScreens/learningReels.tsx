@@ -13,8 +13,8 @@ import {
   import CommentModal from "../../../components/commetModal";
   import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
   import LinearGradient from 'react-native-linear-gradient';
-  
-  const LearningReels = () => {
+  import VideoPlayer from 'react-native-video-controls';
+  const LearningReels = ({navigation}) => {
     const dispatch = useDispatch();
     const { pofileData, loading } = useSelector((store) => store.sliceReducer);
     const [post, setPost] = useState<any>([]);
@@ -89,15 +89,15 @@ import {
             item?.contentType == "Video" &&
             <View style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT - 70 }}>
 
-        <TouchableOpacity
-          style={{ width: '100%', height: '100%' }}
+        {/* <View
+          style={{ width: '100%', height: 400 }}
           activeOpacity={1}
-         /* onPress={() => {
+          onPress={() => {
             setIsVideoPlaying(currentPlayingVideo !== item._id);
             setCurrentPlayingVideo(item._id);
-          }} */
-        >
-          <Video
+          }} > */}
+        
+           <VideoPlayer
             resizeMode="contain"
             source={{ uri: item?.contentURL }}
            // paused={currentPlayingVideo !== item._id || !isVideoPlaying}
@@ -105,13 +105,16 @@ import {
            style={styles.backgroundVideo}
            repeat={true}
            controls={true}
+           disableBack={true}
+           
           />
-                    <LinearGradient
+                    {/* <LinearGradient
             colors={['rgba(0,0,0,0.0)', 'rgba(0,0,0,1)']}
             style={styles.gradientOverlay}
-          />
-        </TouchableOpacity>
-                <View style={{ position: 'absolute', bottom: Platform.OS === 'ios' ? 80 : 20, left: 20 }}>
+          /> */}
+        {/* </View> */}
+
+                <View style={{ position: 'absolute', bottom: Platform.OS === 'ios' ? 120 : 75, left: 20 ,}}>
                     <View style={{ flexDirection: 'row' }}>
                         {item?.userId?.profilePicture ?
                             <Image
@@ -373,6 +376,8 @@ const styles = StyleSheet.create({
     backgroundVideo: {
         height: '100%',
         width: '100%',
+        // marginVertical: 20
+       paddingBottom:Platform.OS === 'ios' ?'13%': '2%'
 
     },
     emptyList: {

@@ -33,25 +33,28 @@ const Home = () => {
     const [refreshing, setRefreshing] = useState(false);
     const [imageUlr, setImageUrl] = useState(null)
     const [showImage, setShowImage] = useState(false)
-
+    const [likes, setLikes]=useState<any>([])
     // console.log("pofileData---->",pofileData,"pofileData---->")
 
     useFocusEffect(
         React.useCallback(() => {
-
             homePageData()
-            setHasMore(true); // Ensure we can load more pages after a refresh
+            setHasMore(true);
             return () => {
-                // Any cleanup actions if necessary
+                setPage(1)
+                setHome([])
             };
         }, [])
     );
+
+  
+
 
     const homePageData = () => {
         dispatch(setLoading(true));
         getHomePageData(page)
             .then((res) => {
-               
+
                 if (res?.data?.content.length > 0) {
                     setHome([...home, ...res.data.content]);
                 } else {
@@ -70,7 +73,6 @@ const Home = () => {
 
 
     const onRefresh = () => {
-       
         setRefreshing(true);
         dispatch(setLoading(true));
         getHomePageData(1)
@@ -90,17 +92,7 @@ const Home = () => {
             });
     }
 
-    /* const loadMorePosts = () => {
-         if (hasMore) {
-             setPage(prevPage => {
-                 const newPage = prevPage + 1;
-                 console.log("Loading more posts, Page:", newPage);
-                 homePageData(newPage, pageSize); // Fetch new data with the updated page
-                 return newPage;
-             });
-         }
-     }       
-       */
+  
 
     const loadMorePosts = () => {
         if (hasMore) {
@@ -110,19 +102,9 @@ const Home = () => {
     };
 
 
-    /*   useEffect(() => {
-         setPage(1); // Reset page number to 1
-         homePageData(1, pageSize); // Load first page
-     }, []);
- */
-    // useEffect(() => {
-    //     if (page > 1) {
-    //       homePageData(page, pageSize); 
-    //     }
-    //   }, [page]);
+   
 
     useEffect(() => {
-        // getPhoneConatcts()
         const backAction = () => {
             Alert.alert('Exit App', 'Do you want to exit the app?', [
                 {
@@ -163,57 +145,35 @@ const Home = () => {
         setCommment(true)
     }
 
-    /*const homePageData = () => {
-            setRefreshing(true)
-            dispatch(setLoading(true))
-            getHomePageData().then((res) => {
-                console.log(res?.data,"res?.data?.content=====>")
-                setHome(res?.data?.content)
-                dispatch(setLoading(false))
-                setRefreshing(false)
-            })
-        }
-    */
-
-    /*
-    const homePageData = (page, pageSize) => {
-        console.log("Fetching data for Page:", page); 
-        setRefreshing(true);
-        dispatch(setLoading(true));
-        getHomePageData(page, pageSize).then((res) => {
-                if(res?.data?.content.length > 0){
-                    // Append new posts to the existing ones
-                    setHome(prevPosts => [...prevPosts, ...res.data.content]);
-                } else {
-                    // No more posts to load
-                    setHasMore(false);
-                }
-                dispatch(setLoading(false));
-                setRefreshing(false);
-            })
-            .catch((error) => {
-                // Handle any errors here
-                dispatch(setLoading(false));
-                setRefreshing(false);
-            });
-    }
-    
-    */
+  
     const likeThisPost = (item) => {
+        const isSelected = likes.includes(item?._id);
         if (item?.likes.includes(pofileData?.user?._id)) {
-            sendUnLikeRequest(item?._id).then((res) => {
-                getHomePageData(page).then((res) => {
-                    setHome(res?.data?.content)
+            sendUnLikeRequest(item?._id).then((res) => { 
+                getHomePageData(page)
+                .then((res) => {
+                    if (res?.data?.content.length > 0) {
+                        setHome(res.data.content);
+                    } else {
+                        setHasMore(false);
+                    }
+                    dispatch(setLoading(false));
+                    setRefreshing(false);
                 })
+                .catch((error) => {
+                    console.log(error);
+                    dispatch(setLoading(false));
+                    setRefreshing(false);
+                });
             })
-        } else {
-
+        } else if(isSelected){
+            let newArray = likes.filter(items => items !== item?._id);
+            setLikes(newArray)
+        }
+        else {
             sendLikeRequest(item?._id).then(() => {
-                getHomePageData(page).then((res) => {
-                    setHome(res?.data?.content)
-                })
+               setLikes([...likes,item?._id]) 
             })
-
         }
     }
 
@@ -286,11 +246,39 @@ const Home = () => {
                     <Image style={{}} source={item?.typeImg} />
                 </View>
                 {item?.contentType == "Video" ?
+                    
+                    Platform.OS === "android"  ?
+
+                    <TouchableOpacity activeOpacity={1}  onPress={() => { showFullImage(item) }}
+                     style={{
+                        width: '100%', height: 250,
+                        backgroundColor: 'black',
+                        borderRadius: 15, marginVertical: 10,
+                        alignItems:'center',justifyContent:'center'
+                    }}>
+                        <View style={{width: 40,
+                                height: 40,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 25,
+                                backgroundColor: ColorCode.blue_Button_Color,}}>
+                        <Image
+                             resizeMode='contain'
+                                style={{ height: 20, width: 20, tintColor: 'white' }}
+                                source={require('../../../assets/images/Polygon1.png')}
+                            />
+                        </View>
+
+                    </TouchableOpacity>
+
+
+                    :
+                    
+                    
                     <TouchableOpacity
                         style={{ alignItems: 'center' }}
                         activeOpacity={1}
-                        onPress={() => { showFullImage(item) }}
-                    >
+                        onPress={() => { showFullImage(item) }}>
                         <Video
                             resizeMode='cover'
 
@@ -364,18 +352,18 @@ const Home = () => {
                 </View>
                 <View style={styles.line} />
 
-                <View style={{ width: '100%', flexDirection:'row' }}>
+                <View style={{ width: '100%', flexDirection: 'row' }}>
 
                     <FlatList
                         horizontal={true}
                         data={item?.hashtags}
-                        renderItem={({item})=>{
-                            return(
+                        renderItem={({ item }) => {
+                            return (
                                 <Text
-                                numberOfLines={1}
-                                style={[styles.smalltxt, {
-                                    textAlign: 'left',lineHeight:30
-                                }]}>{item}</Text>
+                                    numberOfLines={1}
+                                    style={[styles.smalltxt, {
+                                        textAlign: 'left', lineHeight: 30
+                                    }]}>{item}</Text>
                             )
                         }}
                         keyExtractor={(item, index) => index.toString()}
@@ -403,7 +391,7 @@ const Home = () => {
                         <TouchableOpacity
                             onPress={() => { likeThisPost(item) }}>
                             <Image style={{ top: -20 }}
-                                tintColor={item?.likes.includes(pofileData?.user?._id) ? ColorCode.blue_Button_Color : 'grey'}
+                                tintColor={item?.likes.includes(pofileData?.user?._id) || likes.includes(item?._id) ? ColorCode.blue_Button_Color :   'grey'}
                                 source={require('../../../assets/images/heart.png')} />
                         </TouchableOpacity>
                         <Text style={[styles.boldStyle, { top: -20, paddingLeft: 0 }]}>{item?.likes.length}</Text>
@@ -444,7 +432,7 @@ const Home = () => {
                     renderItem={renderItem_didNumber}
                     keyExtractor={(item, index) => index.toString()}
                     onEndReached={loadMorePosts}
-                    onEndReachedThreshold={0.5} // Adjust as needed
+                    onEndReachedThreshold={0.5} 
                     refreshControl={<RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh}

@@ -14,7 +14,7 @@ const TabNavigator = () => {
 
   useEffect(() => {
 
-    getMyProfile().then((res) => {
+    getMyProfile(1).then((res) => {
       dispatch(setProfileDat(res?.data))
       // setProfileDat((res?.data))
       // console.log("res?.data=====>",res?.data,"res?.data=====>")

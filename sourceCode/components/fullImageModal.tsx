@@ -12,7 +12,7 @@ import { deleteAccont } from '../utils/apiHelpers';
 import Loader from './loader';
 import { setLoading } from '../redux/reducer';
 import Video from 'react-native-video';
-
+import VideoPlayer from 'react-native-video-controls';
 const FullImageModal = (props: any) => {
     const navigation = useNavigation<any>()
     const dispatch = useDispatch();
@@ -41,13 +41,25 @@ const FullImageModal = (props: any) => {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.main}
                     activeOpacity={1}
-                   // onPress={() => { props.close() } } 
-                    >
+                // onPress={() => { props.close() } } 
+                >
 
                     <View style={styles.inner}>
                         {props?.imageUrl?.contentType === "Video" ?
 
-                            <Video
+                            // <Video
+                            //     resizeMode='contain'
+                            //     source={{ uri: props?.imageUrl?.contentURL }}
+                            //     style={{
+                            //         width: '100%', height: '100%',
+                            //         borderRadius: 15, marginVertical: 10
+                            //     }}
+                            //     repeat={true}
+                            //     onLoad={() => setLoading(false)}
+                            //     controls={true}
+                            // />
+
+                            <VideoPlayer
                                 resizeMode='contain'
                                 source={{ uri: props?.imageUrl?.contentURL }}
                                 style={{
