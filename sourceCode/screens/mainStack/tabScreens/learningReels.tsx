@@ -17,7 +17,7 @@ import {
   const LearningReels = () => {
     const dispatch = useDispatch();
     const { pofileData, loading } = useSelector((store) => store.sliceReducer);
-    const [post, setPost] = useState([]);
+    const [post, setPost] = useState<any>([]);
     const [showComment, setComment] = useState(false);
     const [commentArray, setArray] = useState(null);
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
@@ -26,18 +26,22 @@ import {
     const [pageSize, setPageSize] = useState(10); // Set the page size
     const [hasMore, setHasMore] = useState(true); // Track if there are more records to load
     const [captionLine, setCaptionLine] = useState(2)
-  
+    const[control,setControl]=useState(true)
     useEffect(() => {
         dispatch(setLoading(true));
-        loadMoreData(); // Initial load of data
-      }, []);
+        loadMoreData(); 
+        setControl(true)
+        return () => setControl(false)
+       
+      }, [control]);
+    //   console.log( control,'control========>')
       
-      const loadMoreData = () => {
+    const loadMoreData = () => {
         // Fetch content for the current page and page size
-        allPostData(page, pageSize)
+        allPostData(page)
           .then((res) => {
             dispatch(setLoading(false));
-            const newPosts = res.data.content;
+            const newPosts = res?.data?.content;
             if (newPosts.length === 0) {
               // No more records to load
               setHasMore(false);
@@ -80,7 +84,7 @@ import {
     const SCREEN_HEIGHT = Dimensions.get('window').height;
     
     const renderItem_didNumber = ({ item, index }: any) => {
-        console.log(item, "itemmmm=======>")
+        // console.log(item, "itemmmm=======>")
         return (
             item?.contentType == "Video" &&
             <View style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT - 70 }}>

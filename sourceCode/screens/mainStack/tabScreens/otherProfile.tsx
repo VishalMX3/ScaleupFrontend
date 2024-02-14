@@ -45,7 +45,7 @@ const OtherProfile = () => {
           const fetchData = () => {
             setPage(1); // Ensure we reset to page 1
             setHasMore(true); // Reset hasMore to true for fresh fetch
-            get(1, pageSize); // Fetch the first page data
+            get(); // Fetch the first page data
           };
     
           fetchData(); // Call fetchData to load initial data
@@ -57,22 +57,25 @@ const OtherProfile = () => {
       );
 
         
-      const get = (page, currentPageSize) => {
+      const get = () => {
         console.log("Fetching data for Page:", page);
         if (page === 1) setRefreshing(true);
         else dispatch(setLoading(true));
-    
-        getUserData(other, page, currentPageSize)
+       const payload ={id:other, number:page}
+        getUserData(payload)
           .then((res) => {
             const { data: newData } = res;
     
             if (page === 1) {
-              setAllData(newData); // Reset data if we're fetching the first page
+              setAllData(newData); 
+            
             } else {
               setAllData(prevData => ({
                ...prevData,
                 content: [...prevData.content, ...newData.content],
+                
               }));
+             
             }
     
             setHasMore(newData.content.length === currentPageSize);
@@ -89,12 +92,13 @@ const OtherProfile = () => {
       const onRefresh = () => {
         setPage(1); // Reset to page 1
         setHasMore(true); // Assume there's more data to fetch
-        get(1, pageSize); // Fetch page 1 data again
+        get(); // Fetch page 1 data again
       };
     
     const loadMoreContent = () => {
         if (hasMore) {
           setPage(prevPage => prevPage + 1);
+          get()
         }
       };
     

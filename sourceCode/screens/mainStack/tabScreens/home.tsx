@@ -4,7 +4,7 @@ import {
     TextInput, TouchableOpacity, View, StatusBar, FlatList, SafeAreaView, Alert, BackHandler, RefreshControl
 } from "react-native"
 import React, { useEffect, useState } from "react"
-import { useNavigation,useFocusEffect } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import ColorCode from "../../../constants/Styles";
 import { AuthHeader, TabHeader } from "../../../components";
@@ -22,7 +22,7 @@ const Home = () => {
 
     const dispatch = useDispatch();
     const navigation = useNavigation<any>()
-    const [home, setHome] = useState([])
+    const [home, setHome] = useState<any>([])
     const [hasMore, setHasMore] = useState(true);
     const [showComment, setCommment] = useState(false)
     const [page, setPage] = useState(1);
@@ -33,70 +33,93 @@ const Home = () => {
     const [refreshing, setRefreshing] = useState(false);
     const [imageUlr, setImageUrl] = useState(null)
     const [showImage, setShowImage] = useState(false)
-    
+
     // console.log("pofileData---->",pofileData,"pofileData---->")
 
     useFocusEffect(
         React.useCallback(() => {
-          setPage(1); // Reset page number to 1
-          homePageData(1, pageSize); // Load first page
-          setHasMore(true); // Ensure we can load more pages after a refresh
-          return () => {
-            // Any cleanup actions if necessary
-          };
-        }, [])
-      );
 
-      const homePageData = (page, pageSize) => {
-        console.log(pageSize,"Fetching data for Page:", page);
+            homePageData()
+            setHasMore(true); // Ensure we can load more pages after a refresh
+            return () => {
+                // Any cleanup actions if necessary
+            };
+        }, [])
+    );
+
+    const homePageData = () => {
+        dispatch(setLoading(true));
+        getHomePageData(page)
+            .then((res) => {
+               
+                if (res?.data?.content.length > 0) {
+                    setHome([...home, ...res.data.content]);
+                } else {
+                    setHasMore(false);
+                }
+                dispatch(setLoading(false));
+                setRefreshing(false);
+            })
+            .catch((error) => {
+                console.log(error);
+                dispatch(setLoading(false));
+                setRefreshing(false);
+            });
+    };
+
+
+
+    const onRefresh = () => {
+       
         setRefreshing(true);
         dispatch(setLoading(true));
-        getHomePageData(page, pageSize)
-          .then((res) => {
-            if (res?.data?.content.length > 0) {
-              setHome(prevPosts => page === 1 ? [...res.data.content] : [...prevPosts, ...res.data.content]);
-            } else {
-              setHasMore(false);
-            }
-            dispatch(setLoading(false));
-            setRefreshing(false);
-          })
-          .catch((error) => {
-            console.log(error);
-            dispatch(setLoading(false));
-            setRefreshing(false);
-          });
-      };
-
-   /* const loadMorePosts = () => {
-        if (hasMore) {
-            setPage(prevPage => {
-                const newPage = prevPage + 1;
-                console.log("Loading more posts, Page:", newPage);
-                homePageData(newPage, pageSize); // Fetch new data with the updated page
-                return newPage;
+        getHomePageData(1)
+            .then((res) => {
+                if (res?.data?.content.length > 0) {
+                    setHome(res.data.content);
+                } else {
+                    setHasMore(false);
+                }
+                dispatch(setLoading(false));
+                setRefreshing(false);
+            })
+            .catch((error) => {
+                console.log(error);
+                dispatch(setLoading(false));
+                setRefreshing(false);
             });
-        }
-    }       
-      */
+    }
+
+    /* const loadMorePosts = () => {
+         if (hasMore) {
+             setPage(prevPage => {
+                 const newPage = prevPage + 1;
+                 console.log("Loading more posts, Page:", newPage);
+                 homePageData(newPage, pageSize); // Fetch new data with the updated page
+                 return newPage;
+             });
+         }
+     }       
+       */
 
     const loadMorePosts = () => {
         if (hasMore) {
-          setPage(prevPage => prevPage + 1);
+            setPage(prevPage => prevPage + 1);
+            homePageData()
         }
-      };
+    };
 
-   
-   /*   useEffect(() => {
-        setPage(1); // Reset page number to 1
-        homePageData(1, pageSize); // Load first page
-    }, []);
-*/
-useEffect(() => {
-    if (page > 1) {
-      homePageData(page, pageSize); // Fetch next page data when page state updates
-    }
-  }, [page]);
+
+    /*   useEffect(() => {
+         setPage(1); // Reset page number to 1
+         homePageData(1, pageSize); // Load first page
+     }, []);
+ */
+    // useEffect(() => {
+    //     if (page > 1) {
+    //       homePageData(page, pageSize); 
+    //     }
+    //   }, [page]);
 
     useEffect(() => {
         // getPhoneConatcts()
@@ -127,7 +150,7 @@ useEffect(() => {
 
     const postComment = (data) => {
         addComment(data).then((res) => {
-            getHomePageData().then((res) => {
+            getHomePageData(page).then((res) => {
                 setHome(res.data.content)
                 setCommment(false)
             })
@@ -140,53 +163,53 @@ useEffect(() => {
         setCommment(true)
     }
 
-/*const homePageData = () => {
-        setRefreshing(true)
-        dispatch(setLoading(true))
-        getHomePageData().then((res) => {
-            console.log(res?.data,"res?.data?.content=====>")
-            setHome(res?.data?.content)
-            dispatch(setLoading(false))
-            setRefreshing(false)
-        })
+    /*const homePageData = () => {
+            setRefreshing(true)
+            dispatch(setLoading(true))
+            getHomePageData().then((res) => {
+                console.log(res?.data,"res?.data?.content=====>")
+                setHome(res?.data?.content)
+                dispatch(setLoading(false))
+                setRefreshing(false)
+            })
+        }
+    */
+
+    /*
+    const homePageData = (page, pageSize) => {
+        console.log("Fetching data for Page:", page); 
+        setRefreshing(true);
+        dispatch(setLoading(true));
+        getHomePageData(page, pageSize).then((res) => {
+                if(res?.data?.content.length > 0){
+                    // Append new posts to the existing ones
+                    setHome(prevPosts => [...prevPosts, ...res.data.content]);
+                } else {
+                    // No more posts to load
+                    setHasMore(false);
+                }
+                dispatch(setLoading(false));
+                setRefreshing(false);
+            })
+            .catch((error) => {
+                // Handle any errors here
+                dispatch(setLoading(false));
+                setRefreshing(false);
+            });
     }
-*/
-
-/*
-const homePageData = (page, pageSize) => {
-    console.log("Fetching data for Page:", page); 
-    setRefreshing(true);
-    dispatch(setLoading(true));
-    getHomePageData(page, pageSize).then((res) => {
-            if(res?.data?.content.length > 0){
-                // Append new posts to the existing ones
-                setHome(prevPosts => [...prevPosts, ...res.data.content]);
-            } else {
-                // No more posts to load
-                setHasMore(false);
-            }
-            dispatch(setLoading(false));
-            setRefreshing(false);
-        })
-        .catch((error) => {
-            // Handle any errors here
-            dispatch(setLoading(false));
-            setRefreshing(false);
-        });
-}
-
-*/
+    
+    */
     const likeThisPost = (item) => {
         if (item?.likes.includes(pofileData?.user?._id)) {
             sendUnLikeRequest(item?._id).then((res) => {
-                getHomePageData().then((res) => {
+                getHomePageData(page).then((res) => {
                     setHome(res?.data?.content)
                 })
             })
         } else {
 
             sendLikeRequest(item?._id).then(() => {
-                getHomePageData().then((res) => {
+                getHomePageData(page).then((res) => {
                     setHome(res?.data?.content)
                 })
             })
@@ -264,13 +287,13 @@ const homePageData = (page, pageSize) => {
                 </View>
                 {item?.contentType == "Video" ?
                     <TouchableOpacity
-                    style={{alignItems:'center'}}
+                        style={{ alignItems: 'center' }}
                         activeOpacity={1}
-                       onPress={() => { showFullImage(item) }}
-                        >
+                        onPress={() => { showFullImage(item) }}
+                    >
                         <Video
                             resizeMode='cover'
-                            
+
                             source={{ uri: item?.contentURL }}
                             paused={true}
                             style={{
@@ -279,9 +302,9 @@ const homePageData = (page, pageSize) => {
                                 borderRadius: 15, marginVertical: 10
                             }}
                             repeat={false}
-                          
-                            
-                            >
+
+
+                        >
                         </Video>
                         <View
                             style={{
@@ -298,12 +321,12 @@ const homePageData = (page, pageSize) => {
                                 borderWidth: 1,
                                 borderColor: 'white',
                             }}
-                            >
+                        >
                             <Image
                                 style={{ height: 12, width: 12, tintColor: 'white' }}
                                 source={require('../../../assets/images/Polygon1.png')}
                             />
-                            </View>
+                        </View>
                     </TouchableOpacity>
                     :
                     <TouchableOpacity
@@ -341,18 +364,34 @@ const homePageData = (page, pageSize) => {
                 </View>
                 <View style={styles.line} />
 
-                <View style={{ flexDirection: 'row' }}>
-                    {item?.hashtags.map((item) => {
+                <View style={{ width: '100%', flexDirection:'row' }}>
+
+                    <FlatList
+                        horizontal={true}
+                        data={item?.hashtags}
+                        renderItem={({item})=>{
+                            return(
+                                <Text
+                                numberOfLines={1}
+                                style={[styles.smalltxt, {
+                                    textAlign: 'left',lineHeight:30
+                                }]}>{item}</Text>
+                            )
+                        }}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+
+                    {/* {item?.hashtags.map((item) => {
                         // console.log(item,'hastgas=====>')
                         return (
                             <Text
-                                numberOfLines={2}
+                                numberOfLines={1}
                                 style={[styles.smalltxt, {
                                     textAlign: 'left',
                                 }]}>{item}</Text>
                         )
                     })
-                    }
+                    } */}
                     {/* {item?.isVerified &&
                         <Image
                             source={require('../../../assets/images/security-user.png')}
@@ -408,7 +447,7 @@ const homePageData = (page, pageSize) => {
                     onEndReachedThreshold={0.5} // Adjust as needed
                     refreshControl={<RefreshControl
                         refreshing={refreshing}
-                        onRefresh={homePageData}
+                        onRefresh={onRefresh}
                     />}
                     ListEmptyComponent={
 
@@ -431,7 +470,7 @@ const homePageData = (page, pageSize) => {
                 <CommentModal
                     close={() => { setCommment(false) }}
                     value={commentArray}
-                    post={(t) => { postComment(t) }}
+                    post={(t: any) => { postComment(t) }}
                 />
             }
             {showImage &&

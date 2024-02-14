@@ -23,12 +23,13 @@ export const registerApi = (payload) => {
     });
   };
 
-  export const allPostData = () => {
+  export const allPostData = (payload) => {
     // console.log("login_payload--->", payload)
     return apiClient({
       baseURL: BASE_URL,
       method: GET_METHOD,
-      url: ALLCONTENT,
+      url: `${ALLCONTENT}?page=${payload}&pageSize=10`,
+      
       // data: payload,
     });
   };
@@ -67,25 +68,25 @@ export const registerApi = (payload) => {
 
 
   
-  export const getMyProfile = () => {
+  export const getMyProfile = (payload) => {
     
     return apiClient({
       baseURL: BASE_URL,
       method: GET_METHOD,
-      url: USERPROFILE,
+      url: `${USERPROFILE}?page=${payload}&pageSize=10`,
+      
       // data: payload,
     });
   };
 
   
   
-  export const getHomePageData = () => {
-
+  export const getHomePageData = (payload) => {
+    console.log( payload,"nadbsfhbdj===>")
     return apiClient({
       baseURL: BASE_URL,
       method: GET_METHOD,
-      url:  HOMEPAGE,
-    
+      url:  `${HOMEPAGE}?page=${payload}&pageSize=10`,
     });
   };
 
@@ -167,10 +168,12 @@ export const registerApi = (payload) => {
 
 
   export const getUserData = (payload) => {
+    console.log(payload,"getUserData====>")
     return apiClient({
       baseURL: BASE_URL,
       method: GET_METHOD,
-      url:  CONTENTDETAIL +"/"+payload,
+      url:  `${CONTENTDETAIL}/${payload?.id}?page=${payload?.number}&pageSize=10` ,
+      
     
     });
   };
@@ -352,7 +355,8 @@ export const registerApi = (payload) => {
     return apiClient({
       baseURL: BASE_URL,
       method: GET_METHOD,
-      url:  `${VERIFICATION}?${payload}=2&pageSize=10`,
+      url:  `${VERIFICATION}?page=${payload}&pageSize=10`,
+      
      
     });
   };

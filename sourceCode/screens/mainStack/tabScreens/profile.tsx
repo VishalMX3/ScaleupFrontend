@@ -95,7 +95,7 @@ const Profile = () => {
         setLoadingMore(true);
         const nextPage = page + 1;
         const pageSize = 10; 
-        getMyProfile(nextPage,pageSize).then((res) => {
+        getMyProfile(nextPage).then((res) => {
             console.log('Loaded page:', nextPage);
             const newContent = res?.data?.userContent || [];
             setProfileData(prevData => ({
