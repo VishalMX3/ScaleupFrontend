@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         right: 0,
-        bottom:Platform.OS === 'ios'? 0 : '9%',
+        bottom: 0 ,
         height: '50%', // Adjust as needed
 
 
