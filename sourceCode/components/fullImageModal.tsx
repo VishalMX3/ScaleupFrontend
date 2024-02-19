@@ -1,18 +1,12 @@
 //@ts-nocheck
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, Modal, TextInput, Keyboard, FlatList, ActivityIndicator } from 'react-native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import React, { useState } from 'react';
+import { View,StyleSheet, TouchableOpacity, Image, Modal,  ActivityIndicator, Platform } from 'react-native';
 import ColorCode from '../constants/Styles';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDispatch, useSelector } from 'react-redux';
-import OpacityButton from './opacityButton';
-import { setLoginUser } from '../redux/cookiesReducer';
-import { deleteAccont } from '../utils/apiHelpers';
-import Loader from './loader';
-import { setLoading } from '../redux/reducer';
-import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
+import Video from 'react-native-video';
 const FullImageModal = (props: any) => {
     const navigation = useNavigation<any>()
     const dispatch = useDispatch();
@@ -47,18 +41,20 @@ const FullImageModal = (props: any) => {
                     <View style={styles.inner}>
                         {props?.imageUrl?.contentType === "Video" ?
 
-                            // <Video
-                            //     resizeMode='contain'
-                            //     source={{ uri: props?.imageUrl?.contentURL }}
-                            //     style={{
-                            //         width: '100%', height: '100%',
-                            //         borderRadius: 15, marginVertical: 10
-                            //     }}
-                            //     repeat={true}
-                            //     onLoad={() => setLoading(false)}
-                            //     controls={true}
-                            // />
+                        Platform.OS === "ios" ?
 
+                            <Video
+                                resizeMode='contain'
+                                source={{ uri: props?.imageUrl?.contentURL }}
+                                style={{
+                                    width: '100%', height: '100%',
+                                    borderRadius: 15, marginVertical: 10
+                                }}
+                                repeat={true}
+                                onLoad={() => setLoading(false)}
+                                controls={true}
+                            />
+                  :
                             <VideoPlayer
                                 resizeMode='contain'
                                 source={{ uri: props?.imageUrl?.contentURL }}

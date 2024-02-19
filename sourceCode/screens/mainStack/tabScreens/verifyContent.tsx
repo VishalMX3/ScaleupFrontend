@@ -1,6 +1,6 @@
 import {
-    Image, Platform, ScrollView, StyleSheet, Text,Modal,
-    TextInput, TouchableOpacity, View, StatusBar, FlatList, SafeAreaView, Alert,ActivityIndicator
+    Image, Platform, ScrollView, StyleSheet, Text, Modal,
+    TextInput, TouchableOpacity, View, StatusBar, FlatList, SafeAreaView, Alert, ActivityIndicator
 } from "react-native"
 import React, { useEffect, useState } from "react"
 import { useNavigation } from "@react-navigation/native";
@@ -13,7 +13,7 @@ import Strings from "../../../constants/strings";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import reelsData from "../../../constants/helpers";
 import axios from 'axios';
-import { addComment, allPostData, getHomePageData, getUserData, sendLikeRequest, sendUnLikeRequest, verifyContent,getPendingVerifyData } from "../../../utils/apiHelpers";
+import { addComment, allPostData, getHomePageData, getUserData, sendLikeRequest, sendUnLikeRequest, verifyContent, getPendingVerifyData } from "../../../utils/apiHelpers";
 import moment from "moment";
 import CommentModal from "../../../components/commetModal";
 import Loader from "../../../components/loader";
@@ -31,7 +31,7 @@ const ValidateContent = () => {
     const [home, setHome] = useState([])
     const [rating, setrating] = useState(null)
     const [cmt, setCmt] = useState('')
-    const [acp, setacp]=useState(false)
+    const [acp, setacp] = useState(false)
     const [captionLine, setCaptionLine] = useState(2)
     const [imageUlr, setImageUrl] = useState(null)
     const [showImage, setShowImage] = useState(false)
@@ -39,63 +39,63 @@ const ValidateContent = () => {
     const [isFetchingMore, setIsFetchingMore] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [contentData, setContentData] = useState([]);
+
+    /*
+        const get = () => {
+            dispatch(setLoading(true));
+            getPendingVerifyData().then((res) => {
+             //  console.log("API Response:", res); // Log the complete response
+                setHome(res.data.pendingContent); // Access the pendingContent array
+                dispatch(setLoading(false));
+            }).catch((error) => {
+                console.error('API Error:', error);
+                dispatch(setLoading(false));
+            });
+        };
     
-/*
-    const get = () => {
+    
+        useEffect(() => {
+            get()
+        }, [])
+    
+    */
+
+    useEffect(() => {
+        fetchContent();
+    }, []); // Ensure this effect only runs once after mount
+
+    const fetchContent = async () => {
+        //console.log(`Attempting to fetch content for page ${page}, hasMore: ${hasMore}, isFetchingMore: ${isFetchingMore}`);
+
+        if (!hasMore || isFetchingMore) return;
+
         dispatch(setLoading(true));
-        getPendingVerifyData().then((res) => {
-         //  console.log("API Response:", res); // Log the complete response
-            setHome(res.data.pendingContent); // Access the pendingContent array
-            dispatch(setLoading(false));
-        }).catch((error) => {
+        setIsFetchingMore(true);
+
+        try {
+            console.log(`Sending request to getPendingVerifyData with page: ${page}, pageSize: 10`);
+            const response = await getPendingVerifyData(page);
+            console.log(`Received data for page ${page}:`, response.data.pendingContent);
+
+            if (response.data.pendingContent.length > 0) {
+                setHome(prevContent => [...prevContent, ...response.data.pendingContent]);
+                setPage(prevPage => prevPage + 1);
+                const newDataLength = response.data.pendingContent.length;
+                console.log(`New data length for page ${page}: ${newDataLength}`);
+                setHasMore(newDataLength >= 10); // Assuming pageSize is 10
+            } else {
+                console.log('No more data to fetch.');
+                setHasMore(false); // No more data to fetch
+            }
+        } catch (error) {
             console.error('API Error:', error);
+        } finally {
             dispatch(setLoading(false));
-        });
+            setIsFetchingMore(false);
+        }
     };
 
 
-    useEffect(() => {
-        get()
-    }, [])
-
-*/
-
-useEffect(() => {
-    fetchContent();
-      }, []); // Ensure this effect only runs once after mount
-  
-  const fetchContent = async () => {
-    //console.log(`Attempting to fetch content for page ${page}, hasMore: ${hasMore}, isFetchingMore: ${isFetchingMore}`);
-  
-    if (!hasMore || isFetchingMore) return;
-  
-    dispatch(setLoading(true));
-    setIsFetchingMore(true);
-  
-    try {
-      console.log(`Sending request to getPendingVerifyData with page: ${page}, pageSize: 10`);
-      const response = await getPendingVerifyData(page);
-      console.log(`Received data for page ${page}:`, response.data.pendingContent);
-  
-      if (response.data.pendingContent.length > 0) {
-        setHome(prevContent => [...prevContent, ...response.data.pendingContent]);
-        setPage(prevPage => prevPage + 1);
-        const newDataLength = response.data.pendingContent.length;
-        console.log(`New data length for page ${page}: ${newDataLength}`);
-        setHasMore(newDataLength >= 10); // Assuming pageSize is 10
-      } else {
-        console.log('No more data to fetch.');
-        setHasMore(false); // No more data to fetch
-      }
-    } catch (error) {
-      console.error('API Error:', error);
-    } finally {
-      dispatch(setLoading(false));
-      setIsFetchingMore(false);
-    }
-  };
-  
-  
 
     // console.log(cmt,"cmt------>")
 
@@ -107,7 +107,7 @@ useEffect(() => {
             "smeComments": cmt
         }
         verifyContent(data, payload).then((res) => {
-           // console.log(res?.data, "data----->");
+            // console.log(res?.data, "data----->");
             // Clear states
             setCmt('');
             setrating(null);
@@ -206,48 +206,73 @@ useEffect(() => {
                 </View>
 
                 {item?.contentType == "Video" ?
-                    <TouchableOpacity
-                    style={{alignItems:'center'}}
-                        activeOpacity={1}
-                       onPress={() => { showFullImage(item) }}
-                        >
-                        <Video
-                            resizeMode='cover'
-                            
-                            source={{ uri: item?.contentURL }}
-                            paused={true}
+
+                    Platform.OS === "android" ?
+
+                        <TouchableOpacity activeOpacity={1} onPress={() => { showFullImage(item) }}
                             style={{
                                 width: '100%', height: 250,
-                                backgroundColor: ColorCode.lightGrey,
-                                borderRadius: 15, marginVertical: 10
-                            }}
-                            repeat={false}
-                          
-                            
-                            >
-                        </Video>
-                        <View
-                            style={{
-                                position: 'absolute',
-                                top: -10, // Shifted to the top
-                                right: 9, // Shifted to the right
-                                //left: 90,
-                                width: 20,
-                                height: 20,
+                                backgroundColor: 'black',
+                                borderRadius: 15, marginVertical: 10,
+                                alignItems: 'center', justifyContent: 'center'
+                            }}>
+                            <View style={{
+                                width: 40,
+                                height: 40,
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 borderRadius: 25,
                                 backgroundColor: ColorCode.blue_Button_Color,
-                                borderWidth: 1,
-                                borderColor: 'white',
-                            }}
-                            >
-                            <Image
-                                style={{ height: 12, width: 12, tintColor: 'white' }}
-                                source={require('../../../assets/images/Polygon1.png')}
-                            />
+                            }}>
+                                <Image
+                                    resizeMode='contain'
+                                    style={{ height: 20, width: 20, tintColor: 'white' }}
+                                    source={require('../../../assets/images/Polygon1.png')}
+                                />
                             </View>
-                    </TouchableOpacity>
+
+                        </TouchableOpacity>
+                        :
+                        <TouchableOpacity
+                            style={{ alignItems: 'center' }}
+                            activeOpacity={1}
+                            onPress={() => { showFullImage(item) }}
+                        >
+                            <Video
+                                resizeMode='cover'
+                                source={{ uri: item?.contentURL }}
+                                paused={true}
+                                style={{
+                                    width: '100%', height: 250,
+                                    backgroundColor: ColorCode.lightGrey,
+                                    borderRadius: 15, marginVertical: 10}}
+                                repeat={false}
+                                controls={false}
+
+                            >
+                            </Video>
+                            <View
+                                style={{
+                                    position: 'absolute',
+                                    top: -10, // Shifted to the top
+                                    right: 9, // Shifted to the right
+                                    //left: 90,
+                                    width: 20,
+                                    height: 20,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    borderRadius: 25,
+                                    backgroundColor: ColorCode.blue_Button_Color,
+                                    borderWidth: 1,
+                                    borderColor: 'white',
+                                }}
+                            >
+                                <Image
+                                    style={{ height: 12, width: 12, tintColor: 'white' }}
+                                    source={require('../../../assets/images/Polygon1.png')}
+                                />
+                            </View>
+                        </TouchableOpacity>
                     :
                     <TouchableOpacity
                         activeOpacity={1}
@@ -265,7 +290,7 @@ useEffect(() => {
                     </TouchableOpacity>
                 }
 
-                    <View style={{ width: '100%' }}>
+                <View style={{ width: '100%' }}>
                     <Text
                         numberOfLines={captionLine}
                         style={[styles.smalltxt, {
@@ -318,14 +343,14 @@ useEffect(() => {
                         starContainerStyle={{ marginBottom: 30 }}
                         count={5}
                         defaultRating={0}
-                    
+
                         onFinishRating={(t) => { setrating(t) }}
                         size={15}
                     />
 
                 </View>
 
-                
+
                 <TextInput
                     onChangeText={(t) => { setCmt(t) }}
                     value={cmt}
@@ -362,17 +387,17 @@ useEffect(() => {
                     showsVerticalScrollIndicator={false}
                     data={home}
                     renderItem={renderItem_didNumber}
-                    keyExtractor={(item, index) => index.toString()} 
+                    keyExtractor={(item, index) => index.toString()}
                     onEndReached={fetchContent}
                     onEndReachedThreshold={0.5}
                     ListFooterComponent={() => isFetchingMore && <ActivityIndicator size="large" />}
 
-                    />
+                />
 
-                    
+
             </View>
 
-            
+
 
             {showImage &&
                 <FullImageModal
@@ -466,7 +491,7 @@ const styles = StyleSheet.create({
         color: 'white', // Choose your text color
         fontSize: 16,
         fontFamily: 'ComicNeue-Bold',
-        
+
     },
     smalltxt: {
         paddingLeft: 10,
@@ -477,7 +502,7 @@ const styles = StyleSheet.create({
     },
     selectedButton: {
         backgroundColor: 'gold', // Or any color indicating selection
-    
+
         // ... other styling as needed
     },
     unselectedButton: {

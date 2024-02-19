@@ -230,6 +230,32 @@ const Profile = () => {
                     <Image style={{}} source={item?.typeImg} />
                 </View>
                 {item?.contentType == "Video" ?
+                  
+                  Platform.OS === "android"  ?
+
+                  <TouchableOpacity activeOpacity={1}  onPress={() => { showFullImage(item) }}
+                    style={{
+                      width: '100%', height: 250,
+                      backgroundColor: 'black',
+                      borderRadius: 15, marginVertical: 10,
+                      alignItems:'center',justifyContent:'center'}}>
+                      <View style={{width: 40,
+                              height: 40,
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              borderRadius: 25,
+                              backgroundColor: ColorCode.blue_Button_Color,}}>
+                      <Image
+                           resizeMode='contain'
+                              style={{ height: 20, width: 20, tintColor: 'white' }}
+                              source={require('../../../assets/images/Polygon1.png')}
+                          />
+                      </View>
+
+                  </TouchableOpacity>
+
+                  :
+                  
                   <TouchableOpacity 
                   onPress={()=>{showFullImage(item)}} 
                   style={{alignItems:'center'}}>
@@ -239,6 +265,7 @@ const Profile = () => {
                         paused={true}
                         style={{ width: '100%', height: 250, backgroundColor: ColorCode.lightGrey, borderRadius: 15, marginVertical: 10 }}
                         repeat={true}
+                        controls={false}
                         
                     >
                     </Video>

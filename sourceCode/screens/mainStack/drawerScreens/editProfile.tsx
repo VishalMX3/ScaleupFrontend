@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ColorCode from "../../../constants/Styles";
 import {TabHeader } from "../../../components";
 import { getMyProfile } from "../../../utils/apiHelpers";
+import { setName } from "../../../redux/reducer";
 
 const EditProfile = () => {
     const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const EditProfile = () => {
             <View style={[styles.reelsStyle,]}>
                 {/* <Text style={[styles.smalltxt, { fontSize: 18, color: ColorCode.blue_Button_Color }]}>Account</Text> */}
                 <TouchableOpacity
-                    onPress={()=>(navigation.navigate("BasicDetail"))}
+                    onPress={()=>(dispatch(setName('')),navigation.navigate("BasicDetail"))}
                     style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={[styles.smalltxt,]}>Basic Profile</Text>
                     <Image

@@ -2,19 +2,19 @@
 import {
     Image, Platform, StyleSheet, Text,
     TouchableOpacity, View, StatusBar, FlatList, SafeAreaView, Dimensions
-  } from "react-native";
-  import React, { useEffect, useState, useRef } from "react";
-  import { useDispatch, useSelector } from "react-redux";
-  import ColorCode from "../../../constants/Styles";
-  import Video from 'react-native-video';
-  import { addComment,allPostData, sendLikeRequest, sendUnLikeRequest } from "../../../utils/apiHelpers";
-  import { setLoading } from "../../../redux/reducer";
-  import Loader from "../../../components/loader";
-  import CommentModal from "../../../components/commetModal";
-  import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-  import LinearGradient from 'react-native-linear-gradient';
-  import VideoPlayer from 'react-native-video-controls';
-  const LearningReels = ({navigation}) => {
+} from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import ColorCode from "../../../constants/Styles";
+import Video from 'react-native-video';
+import { addComment, allPostData, sendLikeRequest, sendUnLikeRequest } from "../../../utils/apiHelpers";
+import { setLoading } from "../../../redux/reducer";
+import Loader from "../../../components/loader";
+import CommentModal from "../../../components/commetModal";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import LinearGradient from 'react-native-linear-gradient';
+import VideoPlayer from 'react-native-video-controls';
+const LearningReels = ({ navigation }) => {
     const dispatch = useDispatch();
     const { pofileData, loading } = useSelector((store) => store.sliceReducer);
     const [post, setPost] = useState<any>([]);
@@ -26,95 +26,125 @@ import {
     const [pageSize, setPageSize] = useState(10); // Set the page size
     const [hasMore, setHasMore] = useState(true); // Track if there are more records to load
     const [captionLine, setCaptionLine] = useState(2)
-    const[control,setControl]=useState(true)
+    const [control, setControl] = useState(true)
     useEffect(() => {
         dispatch(setLoading(true));
-        loadMoreData(); 
+        loadMoreData();
         setControl(true)
         return () => setControl(false)
-       
-      }, [control]);
+
+    }, [control]);
     //   console.log( control,'control========>')
-      
+
     const loadMoreData = () => {
         // Fetch content for the current page and page size
         allPostData(page)
-          .then((res) => {
-            dispatch(setLoading(false));
-            const newPosts = res?.data?.content;
-            if (newPosts.length === 0) {
-              // No more records to load
-              setHasMore(false);
-            } else {
-              // Append the new data to the existing posts
-              setPost([...post, ...newPosts]);
-              setPage(page + 1);
-            }
-          })
-          .catch((error) => {
-            console.error("Error loading more data:", error);
-          });
-      };
-      
-                // Listen for scroll events to trigger loading more data
-        const handleScroll = ({ nativeEvent }) => {
-            const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
-            const isCloseToBottom =
-            layoutMeasurement.height + contentOffset.y >= contentSize.height - 50;
-            if (isCloseToBottom && hasMore) {
-            loadMoreData();
-            }
-        };
+            .then((res) => {
+                dispatch(setLoading(false));
+                const newPosts = res?.data?.content;
+                if (newPosts.length === 0) {
+                    // No more records to load
+                    setHasMore(false);
+                } else {
+                    // Append the new data to the existing posts
+                    setPost([...post, ...newPosts]);
+                    setPage(page + 1);
+                }
+            })
+            .catch((error) => {
+                console.error("Error loading more data:", error);
+            });
+    };
 
-  /*  const handleViewableItemsChanged = ({ viewableItems }) => {
-      if (viewableItems.length > 0) {
-        const index = viewableItems[0].index;
-        const currentItem = post[index];
-  
-        if (currentItem && currentPlayingVideo !== currentItem._id) {
-          setIsVideoPlaying(false);
-          setCurrentPlayingVideo(null);
+    // Listen for scroll events to trigger loading more data
+    const handleScroll = ({ nativeEvent }) => {
+        const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
+        const isCloseToBottom =
+            layoutMeasurement.height + contentOffset.y >= contentSize.height - 50;
+        if (isCloseToBottom && hasMore) {
+            loadMoreData();
         }
-      }
-    }; 
-    */
-  
-   // const onViewableItemsChanged = useRef(handleViewableItemsChanged);
+    };
+
+    /*  const handleViewableItemsChanged = ({ viewableItems }) => {
+        if (viewableItems.length > 0) {
+          const index = viewableItems[0].index;
+          const currentItem = post[index];
+    
+          if (currentItem && currentPlayingVideo !== currentItem._id) {
+            setIsVideoPlaying(false);
+            setCurrentPlayingVideo(null);
+          }
+        }
+      }; 
+      */
+
+    // const onViewableItemsChanged = useRef(handleViewableItemsChanged);
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
-    
+
     const renderItem_didNumber = ({ item, index }: any) => {
         // console.log(item, "itemmmm=======>")
         return (
             item?.contentType == "Video" &&
             <View style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT - 70 }}>
 
-        {/* <View
-          style={{ width: '100%', height: 400 }}
-          activeOpacity={1}
-          onPress={() => {
-            setIsVideoPlaying(currentPlayingVideo !== item._id);
-            setCurrentPlayingVideo(item._id);
-          }} > */}
-        
-           <VideoPlayer
-            resizeMode="contain"
-            source={{ uri: item?.contentURL }}
-           // paused={currentPlayingVideo !== item._id || !isVideoPlaying}
-           paused={true} 
-           style={styles.backgroundVideo}
-           repeat={true}
-           controls={true}
-           disableBack={true}
-           
-          />
-                    {/* <LinearGradient
-            colors={['rgba(0,0,0,0.0)', 'rgba(0,0,0,1)']}
-            style={styles.gradientOverlay}
-          /> */}
-        {/* </View> */}
+                {/* <View
+                    style={{ width: '100%', height: '100%' }}
+                    onPress={() => {
+                        setIsVideoPlaying(currentPlayingVideo !== item._id);
+                        setCurrentPlayingVideo(item._id);
+                    }} > */}
 
-                <View style={{ position: 'absolute', bottom: Platform.OS === 'ios' ? 120 : 75, left: 20 ,}}>
+
+                {Platform.OS === 'ios' ?
+
+                    <TouchableOpacity
+                        style={{ width: '100%', height: '100%' }}
+                        activeOpacity={1}
+                    /* onPress={() => {
+                      setIsVideoPlaying(currentPlayingVideo !== item._id);
+                      setCurrentPlayingVideo(item._id);
+                    }} */
+                    >
+                        <Video
+                            resizeMode="contain"
+                            source={{ uri: item?.contentURL }}
+                            // paused={currentPlayingVideo !== item._id || !isVideoPlaying}
+                            paused={true}
+                            style={styles.backgroundVideo}
+                            repeat={true}
+                            controls={true}
+                        />
+                        <LinearGradient
+                            colors={['rgba(0,0,0,0.0)', 'rgba(0,0,0,1)']}
+                            style={styles.gradientOverlay}
+                        />
+                    </TouchableOpacity>
+
+                    :
+<>
+                    <VideoPlayer
+                    resizeMode="contain"
+                    source={{ uri: item?.contentURL }}
+                    // paused={currentPlayingVideo !== item._id || !isVideoPlaying}
+                    paused={true}
+                    style={styles.backgroundVideo}
+                    repeat={true}
+                    disableBack={true} />
+                {/* <LinearGradient
+                    colors={['rgba(0,0,0,0.0)', 'rgba(0,0,0,1)']}
+                    style={styles.gradientOverlay}
+                /> */}
+</>
+                    }
+
+                
+
+
+                {/* </View> */}
+
+                <View style={{ position: 'absolute', bottom: Platform.OS === 'ios' ? 120 : 75, left: 20, }}>
                     <View style={{ flexDirection: 'row' }}>
                         {item?.userId?.profilePicture ?
                             <Image
@@ -134,14 +164,14 @@ import {
                             <Text style={[styles.smalltxt, { color: ColorCode.white_Color }]}>{item?.heading}</Text>
                         </View>
                         <View style={{ width: '40%', justifyContent: 'space-between', marginTop: 25 }}>
-                        {item?.isVerified  && (
-                    <Image
-                    resizeMode='contain'
-                    tintColor={'#F6BE00'}
-                        source={require('../../../assets/images/security-user.png')}
-                        style={{ width: 20, height: 20 , right: 20}} // Adjust size as needed
-                    />
-                )}
+                            {item?.isVerified && (
+                                <Image
+                                    resizeMode='contain'
+                                    tintColor={'#F6BE00'}
+                                    source={require('../../../assets/images/security-user.png')}
+                                    style={{ width: 20, height: 20, right: 20 }} // Adjust size as needed
+                                />
+                            )}
                             <TouchableOpacity
                                 onPress={() => { likeThisPost(item) }}
                             >
@@ -192,19 +222,19 @@ import {
                             return (
                                 <Text
                                     numberOfLines={2}
-                                    style={[styles.smalltxt, {textAlign: 'left', }]}>{item}</Text>)
+                                    style={[styles.smalltxt, { textAlign: 'left', }]}>{item}</Text>)
                         })
                         }
                     </View>
                     <View style={{ width: '100%' }}>
-                    <Text
-                        numberOfLines={captionLine}
-                        style={[styles.smalltxt, {textAlign: 'left',}]}>{item?.captions}</Text>
-                    {item?.captions.length > 38 &&
-                        <TouchableOpacity onPress={() => { captionLine === 2 ? setCaptionLine(100) : setCaptionLine(2) }}
-                            style={{}}>
-                            <Text style={[styles.smalltxt, { color: ColorCode.white_Color }]}>{captionLine === 2 ? 'see more' : 'show less'}</Text>
-                        </TouchableOpacity>}
+                        <Text
+                            numberOfLines={captionLine}
+                            style={[styles.smalltxt, { textAlign: 'left', }]}>{item?.captions}</Text>
+                        {item?.captions.length > 38 &&
+                            <TouchableOpacity onPress={() => { captionLine === 2 ? setCaptionLine(100) : setCaptionLine(2) }}
+                                style={{}}>
+                                <Text style={[styles.smalltxt, { color: ColorCode.white_Color }]}>{captionLine === 2 ? 'see more' : 'show less'}</Text>
+                            </TouchableOpacity>}
                     </View>
                 </View>
             </View>
@@ -212,12 +242,12 @@ import {
     }
 
 
-   
+
 
     const postComment = (data) => {
         addComment(data).then((res) => {
             allPostData().then((res) => {
-               // dispatch(setLoading(false))
+                // dispatch(setLoading(false))
                 setPost(res.data.content)
                 setCommment(false)
             })
@@ -258,35 +288,35 @@ import {
 
     return (
         <SafeAreaView style={styles.main}>
-        {loading && <Loader />}
-        <StatusBar barStyle={'dark-content'} animated={true} backgroundColor={ColorCode.white_Color} />
-       
-        <View style={styles.reelsStyle}>
-          <FlatList
-            scrollEnabled={true}
-            showsVerticalScrollIndicator={false}
-            data={post}
-            renderItem={renderItem_didNumber}
-            keyExtractor={(item) => item._id}
-            horizontal
-            pagingEnabled
-            onEndReached={loadMoreData}
-            onEndReachedThreshold={0.5}
-            onScroll={handleScroll}
-           // onViewableItemsChanged={onViewableItemsChanged.current}
-            //viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
-          />
-        </View>
+            {loading && <Loader />}
+            <StatusBar barStyle={'dark-content'} animated={true} backgroundColor={ColorCode.white_Color} />
 
-        {showComment &&
-          <CommentModal
-            close={() => { setComment(false) }}
-            value={commentArray}
-            post={(t) => { postComment(t) }}
-          />
-        }
+            <View style={styles.reelsStyle}>
+                <FlatList
+                    scrollEnabled={true}
+                    showsVerticalScrollIndicator={false}
+                    data={post}
+                    renderItem={renderItem_didNumber}
+                    keyExtractor={(item) => item._id}
+                    horizontal
+                    pagingEnabled
+                    onEndReached={loadMoreData}
+                    onEndReachedThreshold={0.5}
+                    onScroll={handleScroll}
+                // onViewableItemsChanged={onViewableItemsChanged.current}
+                //viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
+                />
+            </View>
 
-      </SafeAreaView>
+            {showComment &&
+                <CommentModal
+                    close={() => { setComment(false) }}
+                    value={commentArray}
+                    post={(t) => { postComment(t) }}
+                />
+            }
+
+        </SafeAreaView>
 
     )
 
@@ -316,9 +346,11 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         right: 0,
-        bottom: 0,
+        bottom:Platform.OS === 'ios'? 0 : '9%',
         height: '50%', // Adjust as needed
-      },
+
+
+    },
     iosShadow: {
         shadowColor: '#ddd',
         shadowOffset: { width: -2, height: 10 },
@@ -377,7 +409,7 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         // marginVertical: 20
-       paddingBottom:Platform.OS === 'ios' ?'13%': '2%'
+        paddingBottom: Platform.OS === 'ios' ? '13%' : '2%'
 
     },
     emptyList: {

@@ -250,12 +250,11 @@ const Home = () => {
                     Platform.OS === "android"  ?
 
                     <TouchableOpacity activeOpacity={1}  onPress={() => { showFullImage(item) }}
-                     style={{
+                      style={{
                         width: '100%', height: 250,
                         backgroundColor: 'black',
                         borderRadius: 15, marginVertical: 10,
-                        alignItems:'center',justifyContent:'center'
-                    }}>
+                        alignItems:'center',justifyContent:'center'}}>
                         <View style={{width: 40,
                                 height: 40,
                                 alignItems: 'center',
@@ -289,6 +288,7 @@ const Home = () => {
                                 backgroundColor: ColorCode.lightGrey,
                                 borderRadius: 15, marginVertical: 10
                             }}
+                            controls={false}
                             repeat={false}
 
 

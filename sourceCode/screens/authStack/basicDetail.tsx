@@ -50,7 +50,7 @@ const BasicDetail = (props) => {
         setAbout(pofileData?.user?.bio?.bioAbout)
         setselectedStartDate(moment(pofileData?.user?.dateOfBirth?.toString()).format('YYYY-MM-DD'))
     }, [])
-
+console.log( pofileData," pofileData?.user?.username====>",pofileData?.user?.username)
 
     const showAlert = () => {
         Alert.alert(

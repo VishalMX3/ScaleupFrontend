@@ -107,13 +107,10 @@ const CommentModal = (props: any) => {
                                 }} />
 
                             <TouchableOpacity
-                                onPress={() => { add() }}
-                            >
+                                onPress={() => { add() }}>
                                 <Image
                                     style={{}}
-                                    source={require('../assets/images/send.png')}
-
-                                />
+                                    source={require('../assets/images/send.png')}/>
                             </TouchableOpacity>
 
                         </View>
