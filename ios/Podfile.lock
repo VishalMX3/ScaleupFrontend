@@ -383,6 +383,9 @@ PODS:
   - React-jsinspector (0.72.5)
   - React-logger (0.72.5):
     - glog
+  - react-native-compressor (1.8.24):
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
   - react-native-image-picker (7.0.1):
     - React-Core
   - react-native-safe-area-context (4.7.2):
@@ -608,6 +611,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-compressor (from `../node_modules/react-native-compressor`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-video (from `../node_modules/react-native-video`)
@@ -708,6 +712,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-compressor:
+    :path: "../node_modules/react-native-compressor"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-safe-area-context:
@@ -803,6 +809,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: ff70a72027dea5cc7d71cfcc6fad7f599f63987a
   React-jsinspector: aef73cbd43b70675f572214d10fa438c89bf11ba
   React-logger: 2e4aee3e11b3ec4fa6cfd8004610bbb3b8d6cca4
+  react-native-compressor: d84e28c430c8022cc44a45ec9ec26071269992c3
   react-native-image-picker: 1569cfade34b3a011191ce262423e6ce2f8db5a1
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
@@ -838,4 +845,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 96f0f055a492e393623aaf0e4ca7465d8e04912c
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

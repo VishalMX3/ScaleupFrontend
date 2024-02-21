@@ -245,7 +245,8 @@ const ValidateContent = () => {
                                 style={{
                                     width: '100%', height: 250,
                                     backgroundColor: ColorCode.lightGrey,
-                                    borderRadius: 15, marginVertical: 10}}
+                                    borderRadius: 15, marginVertical: 10
+                                }}
                                 repeat={false}
                                 controls={false}
 
@@ -265,8 +266,7 @@ const ValidateContent = () => {
                                     backgroundColor: ColorCode.blue_Button_Color,
                                     borderWidth: 1,
                                     borderColor: 'white',
-                                }}
-                            >
+                                }}>
                                 <Image
                                     style={{ height: 12, width: 12, tintColor: 'white' }}
                                     source={require('../../../assets/images/Polygon1.png')}
@@ -302,8 +302,7 @@ const ValidateContent = () => {
                         <TouchableOpacity onPress={() => { captionLine === 2 ? setCaptionLine(100) : setCaptionLine(2) }}
                             style={{}}>
                             <Text style={[styles.smalltxt, { color: ColorCode.blue_Button_Color }]}>{captionLine === 2 ? 'see more' : 'show less'}</Text>
-                        </TouchableOpacity>
-                    }
+                        </TouchableOpacity>}
 
 
 
@@ -343,10 +342,8 @@ const ValidateContent = () => {
                         starContainerStyle={{ marginBottom: 30 }}
                         count={5}
                         defaultRating={0}
-
                         onFinishRating={(t) => { setrating(t) }}
-                        size={15}
-                    />
+                        size={15} />
 
                 </View>
 

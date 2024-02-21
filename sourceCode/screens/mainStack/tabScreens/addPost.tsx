@@ -24,7 +24,7 @@ import { Show_Toast } from "../../../components/toast";
 import { contentCreate } from "../../../utils/apiHelpers";
 import Loader from "../../../components/loader";
 import { setLoading } from "../../../redux/reducer";
-
+import Compressor from 'react-native-compressor';
 const AddPost = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation<any>()
@@ -36,14 +36,13 @@ const AddPost = () => {
     const [myHeading, setMyHeading] = useState('')
     const [myTopic, setMyTopic] = useState('')
     const { pofileData, loading } = useSelector<any, any>((store) => store.sliceReducer);
+
     const toggleSwitch = () => {
         setEnable(!enable)
     }
 
     const setCaptionLength = (t) => {
-
         setCaption(t)
-
     }
 
 
@@ -81,16 +80,13 @@ const AddPost = () => {
         check(Platform.select({ ios: PERMISSIONS.IOS.CAMERA, android: PERMISSIONS.ANDROID.CAMERA })).then((result) => {
             if (result === 'denied') {
                 request(Platform.select({ ios: PERMISSIONS.IOS.CAMERA, android: PERMISSIONS.ANDROID.CAMERA })).then((result) => {
-                    // console.log('permisson ---------------__---------->', result)
                 }).catch((err) => {
-                    // console.log('onRequestPermissionCatchError ->', err)
+
                 })
             } else {
-                // console.log('updateImage ----------->')
                 pickImageByCamera(type)
             }
         }).catch((err) => {
-            // console.log('onCheckPermissionCatchError ->', err)
         })
     };
 
@@ -104,19 +100,17 @@ const AddPost = () => {
             },
         };
         launchCamera(options, (response) => {
-            // console.log(response, "response======>")
             if (response?.didCancel) {
-                // props.close()
-                // console.log('User cancelled image picker');
             } else if (response?.error) {
-                // console.log('ImagePicker Error: ', response?.error);
             } else if (response?.customButton) {
-                // console.log('User tapped custom button: ', response?.customButton);
             } else {
-                // console.log('else ------>', response?.assets[0])
-                const source = { uri: response?.assets[0] };
-                setSelectedImage(source);
-                // props.close()
+                if (type === 'image') {
+                    compressImage(response?.assets[0].uri)
+                }
+                else if (type === 'video') {
+                    compressVideo(response?.assets[0].uri)
+                }
+
             }
         });
     }
@@ -131,19 +125,16 @@ const AddPost = () => {
             },
         };
         launchImageLibrary(options, (response) => {
-            // console.log(response.assets, "response======>")
             if (response?.didCancel) {
-                // props.close()
-                // console.log('User cancelled image picker');
             } else if (response?.error) {
-                // console.log('ImagePicker Error: ', response?.error);
             } else if (response?.customButton) {
-                // console.log('User tapped custom button: ', response.customButton);
             } else {
-                const source = { uri: response?.assets[0] };
-                // console.log(source, "source----->")
-                setSelectedImage(source);
-                // props.close()
+                if (type === 'image') {
+                    compressImage(response?.assets[0].uri)
+                }
+                else if (type === 'video') {
+                    compressVideo(response?.assets[0].uri)
+                }
             }
         });
     };
@@ -151,13 +142,12 @@ const AddPost = () => {
     // console.log(selectedImage?.uri,"11111selectedImage?.uri?.uri===>")
 
     const addPost = () => {
-
         // console.log(hashtag, "hashtag---->", typeof hashtag)
         const type = myType === "image" ? "Image" : "Video"
         var dta = ''
         myType === "image" ? dta = "image/png" : 'video/mp4'
         const formData = new FormData();
-        const data = { name:  myType === "image"?'file.jpg' : "video.mp4", uri: selectedImage?.uri?.uri, type: "multipart/form-data"}
+        const data = { name: myType === "image" ? 'file.jpg' : "video.mp4", uri: selectedImage, type: "multipart/form-data" }
         formData.append('media', data);
         formData.append('captions', caption);
         formData.append('hashtags', hashtag);
@@ -190,6 +180,39 @@ const AddPost = () => {
     }
 
 
+    const compressImage = async (uri) => {
+        try {
+            const compressedImage = await Compressor.Image.compress(uri, {
+                compressionMethod: 'manual',
+                maxWidth: 1000,
+                quality: 0.8,
+            })
+            setSelectedImage(compressedImage);
+        } catch (error) {
+            console.error('Error compressing image:', error);
+        }
+    };
+
+
+    const compressVideo = async (uri) => {
+        dispatch(setLoading(true))
+        try {
+            const compressedImage = await Compressor.Video.compress(uri, {
+                compressionMethod: 'manual',
+                maxWidth: 1000,
+                quality: 0.8,
+
+            })
+            dispatch(setLoading(false))
+            setSelectedImage(compressedImage);
+        } catch (error) {
+            console.error('Error compressing image:', error);
+        }
+    };
+
+
+
+
 
     return (
         <SafeAreaView style={styles.main}>
@@ -201,12 +224,12 @@ const AddPost = () => {
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
              style={{ flex: 1 }}
             > */}
+           
             <ScrollView style={{ flexGrow: 1 }}
                 showsVerticalScrollIndicator={false}
                 automaticallyAdjustKeyboardInsets={true}
                 keyboardShouldPersistTaps="always"
-                keyboardDismissMode='interactive'
-            >
+                keyboardDismissMode='interactive'>
 
                 <StatusBar
                     barStyle={'dark-content'}
@@ -297,23 +320,25 @@ const AddPost = () => {
 
                 </View>
                 <Text style={[styles.smalltxt, { marginTop: 10 }]}>Select an option</Text>
-                {selectedImage?.uri?.uri ?
+                {selectedImage ?
                     <View>
-                        <TouchableOpacity onPress={()=>setSelectedImage(null)}
-                        
-                        style={{ height: 50, width: 50,
-                            position:'absolute',backgroundColor:'white',
-                             zIndex:1,right:20,alignItems:'center',
-                             justifyContent:'center',borderRadius:25}}>
-                          <Image
-                          source={require('../../../assets/images/close_24px.png')}
-                          />
+                        <TouchableOpacity onPress={() => setSelectedImage(null)}
+
+                            style={{
+                                height: 50, width: 50,
+                                position: 'absolute', backgroundColor: 'white',
+                                zIndex: 1, right: 20, alignItems: 'center',
+                                justifyContent: 'center', borderRadius: 25
+                            }}>
+                            <Image
+                                source={require('../../../assets/images/close_24px.png')}
+                            />
                         </TouchableOpacity>
                         <Image
                             resizeMethod='scale'
                             resizeMode={Platform.OS === 'ios' ? 'contain' : 'center'}
                             style={{ width: '95%', alignSelf: 'center', borderRadius: 20, height: 130 }}
-                            source={selectedImage?.uri}
+                            source={{ uri: selectedImage }}
                         />
 
 
@@ -434,6 +459,7 @@ const AddPost = () => {
                 </View>
 
             </ScrollView>
+
             {/* </KeyboardAvoidingView> */}
         </SafeAreaView>
 

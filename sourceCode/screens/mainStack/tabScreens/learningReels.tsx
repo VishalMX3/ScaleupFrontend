@@ -114,7 +114,7 @@ const LearningReels = ({ navigation }) => {
                             paused={true}
                             style={styles.backgroundVideo}
                             repeat={true}
-                            controls={true}
+                            controls={control}
                         />
                         <LinearGradient
                             colors={['rgba(0,0,0,0.0)', 'rgba(0,0,0,1)']}
@@ -183,8 +183,7 @@ const LearningReels = ({ navigation }) => {
                             </TouchableOpacity>
                             <Text style={[styles.boldStyle, { top: -20, paddingLeft: 10, color: ColorCode.white_Color }]}>{item?.likes.length}</Text>
                             <TouchableOpacity
-                                onPress={() => { openCoomentSection(item) }}
-                            >
+                                onPress={() => { openCoomentSection(item) }}>
                                 <Image tintColor={'white'} style={{ top: -20 }}
                                     source={require('../../../assets/images/image_message.png')} />
                             </TouchableOpacity>
@@ -226,14 +225,14 @@ const LearningReels = ({ navigation }) => {
                         })
                         }
                     </View>
-                    <View style={{ width: '100%' }}>
+                    <View >
                         <Text
                             numberOfLines={captionLine}
-                            style={[styles.smalltxt, { textAlign: 'left', }]}>{item?.captions}</Text>
+                            style={[styles.smalltxt, { textAlign: 'left',width:360}]}>{item?.captions}</Text>
                         {item?.captions.length > 38 &&
                             <TouchableOpacity onPress={() => { captionLine === 2 ? setCaptionLine(100) : setCaptionLine(2) }}
                                 style={{}}>
-                                <Text style={[styles.smalltxt, { color: ColorCode.white_Color }]}>{captionLine === 2 ? 'see more' : 'show less'}</Text>
+                                <Text style={[styles.smalltxt, { color: ColorCode.white_Color, }]}>{captionLine === 2 ? 'see more' : 'show less'}</Text>
                             </TouchableOpacity>}
                     </View>
                 </View>
@@ -403,6 +402,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: 'ComicNeue-Bold',
         color: ColorCode.white_Color,
+    
+       
+      
 
     },
     backgroundVideo: {
