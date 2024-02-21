@@ -184,8 +184,7 @@ const AddPost = () => {
         try {
             const compressedImage = await Compressor.Image.compress(uri, {
                 compressionMethod: 'manual',
-                maxWidth: 1000,
-                quality: 0.8,
+               
             })
             setSelectedImage(compressedImage);
         } catch (error) {
