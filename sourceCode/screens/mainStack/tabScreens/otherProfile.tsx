@@ -635,8 +635,9 @@ const styles = StyleSheet.create({
         height: 2,
         backgroundColor: ColorCode.lightGrey,
         width: '95%',
-        marginTop: 30,
-        marginHorizontal: 10
+        
+        marginHorizontal: 10,
+        marginVertical:10
     },
     color: {
         height: 50,

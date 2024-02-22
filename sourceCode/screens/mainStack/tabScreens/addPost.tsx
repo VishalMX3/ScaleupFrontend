@@ -25,6 +25,7 @@ import { contentCreate } from "../../../utils/apiHelpers";
 import Loader from "../../../components/loader";
 import { setLoading } from "../../../redux/reducer";
 import Compressor from 'react-native-compressor';
+import * as Progress from 'react-native-progress';
 const AddPost = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation<any>()
@@ -36,6 +37,9 @@ const AddPost = () => {
     const [myHeading, setMyHeading] = useState('')
     const [myTopic, setMyTopic] = useState('')
     const { pofileData, loading } = useSelector<any, any>((store) => store.sliceReducer);
+    const [progres, setState] = useState(null)
+    const [media, setMedia] = useState('')
+    const [select, setSelect] = useState('Select an option')
 
     const toggleSwitch = () => {
         setEnable(!enable)
@@ -85,6 +89,7 @@ const AddPost = () => {
                 })
             } else {
                 pickImageByCamera(type)
+                setSelect('Uploading...')
             }
         }).catch((err) => {
         })
@@ -104,6 +109,7 @@ const AddPost = () => {
             } else if (response?.error) {
             } else if (response?.customButton) {
             } else {
+                setMedia(type)
                 if (type === 'image') {
                     compressImage(response?.assets[0].uri)
                 }
@@ -129,6 +135,8 @@ const AddPost = () => {
             } else if (response?.error) {
             } else if (response?.customButton) {
             } else {
+                setSelect('Uploading...')
+                setMedia(type)
                 if (type === 'image') {
                     compressImage(response?.assets[0].uri)
                 }
@@ -166,6 +174,7 @@ const AddPost = () => {
             setHashtags('')
             dispatch(setLoading(false))
             navigation.navigate("Home")
+            setSelect('Select an option')
         })
     }
 
@@ -181,10 +190,11 @@ const AddPost = () => {
 
 
     const compressImage = async (uri) => {
+        console.log(uri, "uri======>")
         try {
             const compressedImage = await Compressor.Image.compress(uri, {
                 compressionMethod: 'manual',
-               
+
             })
             setSelectedImage(compressedImage);
         } catch (error) {
@@ -194,15 +204,15 @@ const AddPost = () => {
 
 
     const compressVideo = async (uri) => {
-        dispatch(setLoading(true))
+        console.log(uri, "uri======>")
         try {
             const compressedImage = await Compressor.Video.compress(uri, {
                 compressionMethod: 'manual',
-                maxWidth: 1000,
-                quality: 0.8,
-
+            }, (progress) => {
+                console.log(progress, "progress====>")
+                setState(progress)
             })
-            dispatch(setLoading(false))
+
             setSelectedImage(compressedImage);
         } catch (error) {
             console.error('Error compressing image:', error);
@@ -211,7 +221,7 @@ const AddPost = () => {
 
 
 
-
+    console.log(selectedImage, "selectedImage======>")
 
     return (
         <SafeAreaView style={styles.main}>
@@ -223,7 +233,7 @@ const AddPost = () => {
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
              style={{ flex: 1 }}
             > */}
-           
+
             <ScrollView style={{ flexGrow: 1 }}
                 showsVerticalScrollIndicator={false}
                 automaticallyAdjustKeyboardInsets={true}
@@ -318,11 +328,12 @@ const AddPost = () => {
                     </View>
 
                 </View>
-                <Text style={[styles.smalltxt, { marginTop: 10 }]}>Select an option</Text>
+                <Text style={[styles.smalltxt, { marginTop: 10 }]}>{select}</Text>
+                {progres != null && <Progress.Bar progress={progres} width={null} style={{ margin: 10 }} color={ColorCode.blue_Button_Color} />}
                 {selectedImage ?
-                    <View>
-                        <TouchableOpacity onPress={() => setSelectedImage(null)}
+                    <View style={{}}>
 
+                        <TouchableOpacity onPress={() => { setSelectedImage(null), setState(null), setSelect('Select an option') }}
                             style={{
                                 height: 50, width: 50,
                                 position: 'absolute', backgroundColor: 'white',
@@ -330,15 +341,48 @@ const AddPost = () => {
                                 justifyContent: 'center', borderRadius: 25
                             }}>
                             <Image
-                                source={require('../../../assets/images/close_24px.png')}
-                            />
+                                source={require('../../../assets/images/close_24px.png')} />
                         </TouchableOpacity>
-                        <Image
-                            resizeMethod='scale'
-                            resizeMode={Platform.OS === 'ios' ? 'contain' : 'center'}
-                            style={{ width: '95%', alignSelf: 'center', borderRadius: 20, height: 130 }}
-                            source={{ uri: selectedImage }}
-                        />
+
+
+                        {Platform.OS === 'ios' ?
+
+                            media === 'image' ?
+
+                                <Image
+
+                                    resizeMode={'cover'}
+                                    style={{ width: '95%', alignSelf: 'center', borderRadius: 20, height: 130 }}
+                                    source={{ uri: selectedImage }} />
+
+                                :
+                                <Video
+                                    resizeMode='cover'
+                                    source={{ uri: selectedImage }}
+                                    paused={true}
+                                    style={{ width: '95%', alignSelf: 'center', borderRadius: 20, height: 130 }}
+                                />
+                            :
+
+                            null
+
+
+
+
+
+                        }
+                        {
+                            Platform.OS === 'android'
+                            &&
+                            <Image
+                                // resizeMode={'contain'}
+                                style={{ width: '95%', alignSelf: 'center', borderRadius: 20, height: 130 }}
+                                source={{ uri: selectedImage }} />
+
+                        }
+
+
+
 
 
 
@@ -346,21 +390,22 @@ const AddPost = () => {
                     :
                     <View style={{ flexDirection: 'row', paddingHorizontal: 10, padding: 5, justifyContent: 'space-around' }}>
 
-                        <TouchableOpacity
-                            onPress={() => { showAlert("image") }}
-                        >
-                            <Image source={require('../../../assets/images/imagebutton_.png')}
-                            />
-                            <Text style={[styles.smalltxt, { fontSize: 12 }]}>Photo</Text>
-                        </TouchableOpacity>
+                        {select != "Uploading..." &&
+                            < TouchableOpacity
+                                onPress={() => { showAlert("image") }}>
+                                <Image source={require('../../../assets/images/imagebutton_.png')} />
+                                <Text style={[styles.smalltxt, { fontSize: 12 }]}>Photo</Text>
+                            </TouchableOpacity>
 
-                        <TouchableOpacity
-                            onPress={() => { showAlert("video") }}
-                        >
-                            <Image source={require('../../../assets/images/video_.png')}
-                            />
-                            <Text style={[styles.smalltxt, { fontSize: 12 }]}>Video</Text>
-                        </TouchableOpacity>
+                        }
+
+                        {select != "Uploading..." &&
+                            <TouchableOpacity
+                                onPress={() => { showAlert("video") }}>
+                                <Image source={require('../../../assets/images/video_.png')} />
+                                <Text style={[styles.smalltxt, { fontSize: 12 }]}>Video</Text>
+                            </TouchableOpacity>
+                        }
 
                         {/* <TouchableOpacity >
                 <Image source={require('../../../assets/images/group_.png')}
@@ -460,7 +505,7 @@ const AddPost = () => {
             </ScrollView>
 
             {/* </KeyboardAvoidingView> */}
-        </SafeAreaView>
+        </SafeAreaView >
 
     )
 
