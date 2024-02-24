@@ -93,6 +93,15 @@ const HelpCenter = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
+                    onPress={()=>(navigation.navigate("PrivacyPolicy"))}
+                    style={{ flexDirection: 'row', justifyContent: 'space-between',marginTop: 20  }}>
+                    <Text style={[styles.smalltxt,]}>Platform Guidelines</Text>
+                    <Image
+                     tintColor={'grey'}
+                        source={require('../../../assets/images/ArrowRight.png')}/>
+                </TouchableOpacity>
+
+                <TouchableOpacity
                     onPress={()=>(navigation.navigate("Faqs"))}
                     style={{ flexDirection: 'row', justifyContent: 'space-between',marginTop: 20  }}>
                     <Text style={[styles.smalltxt,]}>FAQs</Text>
