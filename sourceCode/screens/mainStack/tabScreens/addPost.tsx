@@ -81,6 +81,7 @@ const AddPost = () => {
 
 
     const handleChooseCamera = (type) => {
+        setSelect('Preparing Your Video...')
         check(Platform.select({ ios: PERMISSIONS.IOS.CAMERA, android: PERMISSIONS.ANDROID.CAMERA })).then((result) => {
             if (result === 'denied') {
                 request(Platform.select({ ios: PERMISSIONS.IOS.CAMERA, android: PERMISSIONS.ANDROID.CAMERA })).then((result) => {
@@ -122,6 +123,7 @@ const AddPost = () => {
     }
 
     const handleChooseGallery = (type) => {
+        setSelect('Preparing Your Video...')
         const options = {
             title: 'Select Image',
             mediaType: type,
@@ -390,7 +392,7 @@ const AddPost = () => {
                     :
                     <View style={{ flexDirection: 'row', paddingHorizontal: 10, padding: 5, justifyContent: 'space-around' }}>
 
-                        {select != "Uploading..." &&
+                        {select === 'Select an option' &&
                             < TouchableOpacity
                                 onPress={() => { showAlert("image") }}>
                                 <Image source={require('../../../assets/images/imagebutton_.png')} />
@@ -399,7 +401,7 @@ const AddPost = () => {
 
                         }
 
-                        {select != "Uploading..." &&
+                        {select === 'Select an option' &&
                             <TouchableOpacity
                                 onPress={() => { showAlert("video") }}>
                                 <Image source={require('../../../assets/images/video_.png')} />
