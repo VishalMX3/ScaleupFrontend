@@ -12,6 +12,7 @@ import EditProfile from "../screens/mainStack/drawerScreens/editProfile";
 import HelpCenter from "../screens/mainStack/tabScreens/helpCenter";
 import PrivacyPolicy from "../screens/authStack/privacyPolicy";
 import Faqs from "../screens/authStack/faqs";
+import Guidelines from "../screens/authStack/Guidelines";
 
 const Stack = createNativeStackNavigator();
 const StackNavigator = () => {
@@ -46,6 +47,7 @@ const StackNavigator = () => {
       <Stack.Screen name="HelpCenter" component={HelpCenter} />
       <Stack.Screen name="Faqs" component={Faqs} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+      <Stack.Screen name="Guidelines" component={Guidelines} />
     </Stack.Navigator>
   );
 };

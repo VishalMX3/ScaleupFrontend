@@ -93,7 +93,7 @@ const HelpCenter = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={()=>(navigation.navigate("PrivacyPolicy"))}
+                    onPress={()=>(navigation.navigate("Guidelines"))}
                     style={{ flexDirection: 'row', justifyContent: 'space-between',marginTop: 20  }}>
                     <Text style={[styles.smalltxt,]}>Platform Guidelines</Text>
                     <Image

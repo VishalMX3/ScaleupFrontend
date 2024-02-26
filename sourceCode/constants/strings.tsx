@@ -145,7 +145,61 @@ const Strings = {
      7. Changes to this Privacy Policy
      We reserve the right to update or revise this Privacy Policy at any time. We will post the updated Privacy Policy on this page with the "Last Updated" date.
      8. Contact Us
-     If you have any questions or concerns about this Privacy Policy, please contact us at +91-8800237144`
+     If you have any questions or concerns about this Privacy Policy, please contact us at +91-8800237144`,
+
+     guidelines: `Introduction to Guidelines:
+     Welcome to ScaleUp, where we're passionate about creating an enriching, respectful, and educational online community. To maintain this environment, we ask all members to follow these guidelines when posting content or interacting on the platform.
+    
+     Content Creation Guidelines:
+    
+     Educational Focus:
+     Content should primarily be educational, aiming to inform, teach, or provide value in a learning context.
+     Share knowledge that spans a wide range of topics, from academic subjects to practical life skills.
+    
+     Originality and Attribution:
+     Strive for original content. If you're using or referencing someone else's work, proper attribution is mandatory.
+     Plagiarism is strictly prohibited and will result in content removal.
+    
+     Respect and Civility:
+     Ensure all interactions are respectful and constructive. Personal attacks, harassment, and hate speech will not be tolerated. 
+     Engage with the community in a manner that promotes learning and positive exchanges.
+    
+     What to Avoid:
+    
+     Prohibited Content:
+     Content that contains hate speech, threats, explicit material, or anything that could harm others is strictly forbidden.
+     Avoid spreading misinformation or content that lacks factual backing.
+    
+     Inappropriate Behavior:
+    
+     Harassing other users, spamming, or engaging in disruptive activities undermines the community and will lead to moderation action.
+     Moderation and Enforcement:
+    
+     Content Review Process:
+    
+     Our team will review reported content and take appropriate action, including content removal and user warnings.
+     Users are encouraged to report any content that violates these guidelines.
+    
+     Consequences of Violations:
+    
+     Content Removal: Non-compliant content will be removed from the platform. Users will receive a notification explaining the reason for removal.
+     Account Suspension: Users who repeatedly violate guidelines or commit severe infractions may face temporary or permanent account suspension.
+    
+     Notification of Actions:
+     Users whose content has been removed or accounts suspended will receive an email detailing the action taken and the reason behind it. This communication will also include steps for appeal or how to adjust behavior to align with community standards.
+    
+     Appeal Process:
+     Users have the right to appeal moderation decisions by contacting our support team. Please provide context and reasoning for why the content should be reinstated or the account unblocked.
+    
+     Supporting a Positive Community:
+    
+     Encouragement of Positive Engagement: 
+     We encourage users to support one another, offer constructive feedback, and share knowledge in a way that enriches the ScaleUp community.
+    
+     Continuous Learning and Improvement:
+     ScaleUp is dedicated to continuous improvement and open dialogue. We welcome feedback on our guidelines and moderation practices to better serve our community.`
+
+     
 
 }
 
