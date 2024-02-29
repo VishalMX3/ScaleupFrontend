@@ -203,8 +203,10 @@ const Home = () => {
                                 style={styles.profileImg}
                                 source={{ uri: item?.userId?.profilePicture }} />
                             :
-                            <View style={styles.profileImg} >
-                                <Text style={[styles.boldStyle, { paddingLeft: 0 }]}>{item?.username?.substring(0, 2).toUpperCase()}</Text>
+                            <View style={styles.profileImg}>
+                                <Text style={[styles.boldStyle, { paddingLeft: 15, paddingTop: 15, fontSize: 25 }]}>
+                                    {`${item?.firstname?.charAt(0).toUpperCase()}${item?.lastname?.charAt(0).toUpperCase()}`}
+                                </Text>
                             </View>
                         }
 
