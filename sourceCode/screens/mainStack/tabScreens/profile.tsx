@@ -188,7 +188,9 @@ const Profile = () => {
                                     source={{ uri: `${profile}?${cacheBuster}`}}
                                 /> :
                                 <View style={styles.profileImg}>
-                                    <Text style={[styles.boldStyle, { paddingLeft: 0 }]}>{pofileData?.user?.firstname + " " + pofileData?.user?.lastname?.substring(0, 2).toUpperCase()}</Text>
+                                    <Text style={[styles.boldStyle, { paddingLeft: 15, paddingTop: 15, fontSize: 25 }]}>
+                                        {`${pofileData?.user?.firstname?.charAt(0).toUpperCase()}${pofileData?.user?.lastname?.charAt(0).toUpperCase()}`}
+                                    </Text>
                                 </View>
                             }
 
@@ -456,14 +458,22 @@ const Profile = () => {
                                     source={{ uri: `${profile}?${cacheBuster}`}}
                                 /> :
                                 <View style={styles.profileImg}>
-                                    <Text style={[styles.boldStyle, { paddingLeft: 0 }]}>{pofileData?.user?.firstname + " " + pofileData?.user?.lastname?.substring(0, 2).toUpperCase()}</Text>
+                                    <Text style={[styles.boldStyle, { paddingLeft: 15, paddingTop: 15, fontSize: 25 }]}>
+                                        {`${pofileData?.user?.firstname?.charAt(0).toUpperCase()}${pofileData?.user?.lastname?.charAt(0).toUpperCase()}`}
+                                    </Text>
                                 </View>
                             }
                             <View style={[styles.nameType, { marginLeft: 10 }]}>
-                                <Text style={styles.boldStyle}>{pofileData?.user?.firstname + " " + pofileData?.user?.lastname}</Text>
-                               
-                                <Text style={styles.smalltxt}>{pofileData?.user?.email}</Text>
-
+                                <Text style={styles.boldStyle}>
+                                    {pofileData?.user?.firstname + " " + pofileData?.user?.lastname}
+                                </Text>
+                                {/* Horizontal Line */}
+                                <View style={{marginVertical: 5 }}></View>
+                                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                                    <Text style={styles.smalltxt}>
+                                        {pofileData?.user?.email}
+                                    </Text>
+                                </ScrollView>
                             </View>
 
 

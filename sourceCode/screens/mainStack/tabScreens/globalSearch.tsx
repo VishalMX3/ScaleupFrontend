@@ -91,7 +91,9 @@ const GlobalSearch = () => {
                             />
                             :
                             <View style={styles.profileImg}>
-
+                                <Text style={[styles.boldStyle, { paddingLeft: 15, paddingTop: 15, fontSize: 25 }]}>
+                                    {`${item?.firstname?.charAt(0).toUpperCase()}${item?.lastname?.charAt(0).toUpperCase()}`}
+                                </Text>
                             </View>
                         }
                         <View style={styles.nameType}>

@@ -159,6 +159,9 @@ const OtherProfile = () => {
                             :
                             
                             <View style={styles.profileImg}>
+                                <Text style={[styles.boldStyle, { paddingLeft: 15, paddingTop: 15, fontSize: 25 }]}>
+                                    {`${allData?.firstname?.charAt(0).toUpperCase()}${allData?.lastname?.charAt(0).toUpperCase()}`}
+                                </Text>
                             </View>
                         }
                         <View style={[styles.nameType, { width: '55%' }]}>
@@ -413,10 +416,12 @@ const OtherProfile = () => {
                             />
                             :
                             <View style={styles.profileImg}>
-                                    <Text style={[styles.boldStyle, { paddingLeft: 0 }]}>{allData?.usernam?.substring(0, 2)?.toUpperCase()}</Text>
-                                    
-                                </View>
-                        }
+                                <Text style={[styles.boldStyle, { paddingLeft: 15, paddingTop: 15, fontSize: 25 }]}>
+                                    {`${allData?.firstname?.charAt(0).toUpperCase()}${allData?.lastname?.charAt(0).toUpperCase()}`}
+                                </Text>
+                            </View>
+
+                        }   
                             <View style={[styles.nameType, {flex: 1, marginLeft: 10 }]}>
                                 <Text style={[styles.boldStyle, { marginVertical: 1.5 }]}>
                                     {allData?.firstname + " " + allData?.lastname}  {allData?.role === "SME" && <Image
