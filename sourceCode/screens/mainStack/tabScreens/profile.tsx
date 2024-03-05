@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ColorCode from "../../../constants/Styles";
 import { TabHeader } from "../../../components";
 import { AirbnbRating, Rating } from 'react-native-ratings';
-import { addComment, getMyProfile, sendLikeRequest, sendUnLikeRequest } from "../../../utils/apiHelpers";
+import { addComment, getMyProfile, sendLikeRequest, sendUnLikeRequest, deleteContentApi } from "../../../utils/apiHelpers";
 import moment from "moment";
 import Video from "react-native-video";
 import { setLoginUser } from "../../../redux/cookiesReducer";
@@ -63,6 +63,30 @@ const Profile = () => {
 
     // console.log(pofileData?.user?.bio,"pofileData=====>")
 
+    const handleDeleteContent = (contentId) => {
+        dispatch(setLoading(true));
+        deleteContentApi(contentId)
+            .then((response) => {
+                // Assuming your API returns a successful response for the deletion
+                // Filter out the deleted content from your local state to update the UI
+                const updatedContent = pofileData.userContent.filter(item => item._id !== contentId);
+                setProfileData({
+                    ...pofileData,
+                    userContent: updatedContent,
+                });
+                // Optionally, display a success message
+                console.log("Content has been deleted successfully.");
+            })
+            .catch((error) => {
+                // Optionally, handle error
+                console.error("Failed to delete content:", error);
+            })
+            .finally(() => {
+                dispatch(setLoading(false));
+            });
+    };
+    
+    
 
     useEffect(() => {
         const initFetch = async () => {
@@ -362,7 +386,28 @@ const Profile = () => {
                         </TouchableOpacity>
                         <Text style={[styles.boldStyle, { paddingLeft: 0 }]}>{item?.comments?.length}</Text>
                         {/* <Image style={{ top: -20 }} source={item?.ShareImage} /> */}
+
+                        
                     </View>
+
+                    <TouchableOpacity
+                        onPress={() => handleDeleteContent(item._id)}
+                        style={{
+                            marginLeft: 5,
+                            backgroundColor: 'red', // Set the background color for the delete button
+                            borderRadius: 5, // Rounded corners
+                            paddingVertical: 5, // Vertical padding
+                            paddingHorizontal: 8, // Horizontal padding
+                            alignItems: 'center', // Center content horizontally
+                            justifyContent: 'center', // Center content vertically
+                        }}>
+                        <Text style={{
+                            color: 'white', // Text color
+                            fontSize: 12, // Set the font size
+                            fontWeight: 'bold', // Make the text bold
+                        }}>DELETE</Text>
+                    </TouchableOpacity>
+
                     {/* <Image style={{ top: -20 }} source={item?.SaveImage} /> */}
                 </View>
                 <View style={styles.line} />
@@ -414,6 +459,7 @@ const Profile = () => {
 
                 }
 
+                
             </View>
         )
     }
