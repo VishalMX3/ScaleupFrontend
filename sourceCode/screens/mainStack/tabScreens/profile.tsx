@@ -35,51 +35,23 @@ const Profile = () => {
     const [hasMore, setHasMore] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
 
-    /*
-    useEffect(() => {
-        dispatch(setLoading(true))
-        getMyProfile().then((res) => {
-            clearImageCache()
-            dispatch(setLoading(false))
-            setProfileData((res?.data))
-            // console.log(res?.data?.user?.profilePicture,"res?.data?.user?.profilePicture====>")
-            setProfileDats(res?.data?.user?.profilePicture)
-            // console.log("res?.data=====>", res?.data, "res?.data=====>")
-        })
-
-    }, [isFocused])
-
-  
-    useEffect(() => {
-        if (isFocused) {
-            setPage(1);
-            setHasMore(true);
-            setLoadingMore(false);
-            // Fetch initial data here
-        }
-    }, [isFocused]);
-    
-      */
-
-    // console.log(pofileData?.user?.bio,"pofileData=====>")
 
     const handleDeleteContent = (contentId) => {
         dispatch(setLoading(true));
         deleteContentApi(contentId)
             .then((response) => {
-                // Assuming your API returns a successful response for the deletion
-                // Filter out the deleted content from your local state to update the UI
+                
                 const updatedContent = pofileData.userContent.filter(item => item._id !== contentId);
                 setProfileData({
                     ...pofileData,
                     userContent: updatedContent,
                 });
-                // Optionally, display a success message
+                
                 console.log("Content has been deleted successfully.");
             })
             .catch((error) => {
-                // Optionally, handle error
-                console.error("Failed to delete content:", error);
+                
+                    console.error("Failed to delete content:", error);
             })
             .finally(() => {
                 dispatch(setLoading(false));
@@ -92,11 +64,11 @@ const Profile = () => {
         const initFetch = async () => {
           dispatch(setLoading(true));
           try {
-            const res = await getMyProfile(1, 10); // Assume this fetches the first page with 10 items
+            const res = await getMyProfile(1, 10); 
             setProfileData(res?.data);
             setProfileDats(res?.data?.user?.profilePicture);
             setPage(2); // Prepare for next page fetch
-            setHasMore(true); // Assuming there's more data until proven otherwise
+            setHasMore(true); 
           } catch (error) {
             console.error('Error fetching profile data:', error);
           } finally {
@@ -107,7 +79,7 @@ const Profile = () => {
         if (isFocused) {
           initFetch();
         }
-      }, [isFocused]); // Depend on isFocused to re-trigger when coming back to the screen
+      }, [isFocused]); 
       
      const loadMoreItems = () => {
         if (loadingMore || !hasMore) {
@@ -385,6 +357,14 @@ const Profile = () => {
                             <Image source={require('../../../assets/images/image_message.png')} />
                         </TouchableOpacity>
                         <Text style={[styles.boldStyle, { paddingLeft: 0 }]}>{item?.comments?.length}</Text>
+                        {item?.contentType === "Video" && (
+                            <>
+                                <Image tintColor={'black'} style={{  }}
+                                    source={require('../../../assets/images/eye.png')} />
+                                <Text style={[styles.boldStyle, {  paddingLeft: 0 }]}>{item?.viewCount}</Text>
+                            </>
+                        )}
+
                         {/* <Image style={{ top: -20 }} source={item?.ShareImage} /> */}
 
                         

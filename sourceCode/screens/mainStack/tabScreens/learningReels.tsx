@@ -84,7 +84,7 @@ const LearningReels = ({ navigation }) => {
     const SCREEN_HEIGHT = Dimensions.get('window').height;
 
     const renderItem_didNumber = ({ item, index }: any) => {
-        // console.log(item, "itemmmm=======>")
+        console.log(item, "itemmmm=======>")
         return (
             item?.contentType == "Video" &&
             <View style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT - 70 }}>
@@ -191,6 +191,12 @@ const LearningReels = ({ navigation }) => {
                             </TouchableOpacity>
 
                             <Text style={[styles.boldStyle, { top: -20, paddingLeft: 10, color: ColorCode.white_Color }]}>{item?.comments?.length}</Text>
+                            
+                            <Image tintColor={'white'} style={{ top: -20 }}
+                                    source={require('../../../assets/images/eye.png')} />
+                            
+                            <Text style={[styles.boldStyle, { top: -20, paddingLeft: 10, color: ColorCode.white_Color }]}>{item?.viewCount}</Text>
+
 
                         </View>
 

@@ -37,3 +37,4 @@ export const USERCOURSES = "users/courses";
 export const USERCERTIFICATION = "users/certifications"
 export const VERIFICATION = "content/pending-verification"
 export const DELETECONTENT = "content/delete"
+export const INCREMENT_VIEW_COUNT = "content/view";

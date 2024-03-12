@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View,StyleSheet, TouchableOpacity, Image, Modal,  ActivityIndicator, Platform } from 'react-native';
 import ColorCode from '../constants/Styles';
 import { useNavigation } from '@react-navigation/native';
@@ -7,11 +7,37 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useDispatch, useSelector } from 'react-redux';
 import VideoPlayer from 'react-native-video-controls';
 import Video from 'react-native-video';
+import { incrementViewCountApi } from '../utils/apiHelpers'; 
 const FullImageModal = (props: any) => {
     const navigation = useNavigation<any>()
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);
+    const [hasViewBeenCounted, setHasViewBeenCounted] = useState(false);
     const { loginUser } = useSelector<any, any>((store) => store.cookies);
+
+    useEffect(() => {
+        // Reset view count flag whenever the modal is opened with a new video
+        setHasViewBeenCounted(false);
+      }, [props.imageUrl]);
+
+      
+      const handleLoad = () => {
+        setLoading(false);
+        const contentId = props.imageUrl?._id || props.imageUrl?.contentId;
+        console.log(contentId);
+        // Start a timer to increment view count if video is played for at least 10 seconds
+        if (!hasViewBeenCounted && props.imageUrl?.contentType === "Video") {
+          setTimeout(() => {
+            incrementViewCountApi(contentId)
+              .then(() => {
+                console.log("View count incremented");
+                setHasViewBeenCounted(true); // Ensure view count is incremented only once per video play
+              })
+              .catch((error) => console.error("Error incrementing view count", error));
+          }, 10000); // 10 seconds
+        }
+      };
+
 
     return (
         <Modal transparent={true} animationType="slide" style={{ flex: 1 }}>
@@ -50,8 +76,9 @@ const FullImageModal = (props: any) => {
                                     width: '100%', height: '100%',
                                     borderRadius: 15, marginVertical: 10
                                 }}
-                                repeat={true}
-                                onLoad={() => setLoading(false)}
+                                onLoad={handleLoad}
+                                repeat={false}
+                               // onLoad={() => setLoading(false)}
                                 controls={true}
                             />
                   :
@@ -62,8 +89,9 @@ const FullImageModal = (props: any) => {
                                     width: '100%', height: '100%',
                                     borderRadius: 15, marginVertical: 10
                                 }}
+                                onLoad={handleLoad}
                                 repeat={true}
-                                onLoad={() => setLoading(false)}
+                                //onLoad={() => setLoading(false)}
                                 controls={true}
                             />
                             :

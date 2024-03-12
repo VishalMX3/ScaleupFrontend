@@ -140,8 +140,8 @@ const OtherProfile = () => {
     }
 
     const renderItem_didNumber = ({ item, index }: any) => {
-        console.log( item);
-      //  console.log('smeVerify value:', item.smeVerify);
+       // console.log( item);
+        
         return (
             <View
                 style={[styles.postStyle, styles.iosShadow], { marginTop: '0' }}>
@@ -332,6 +332,14 @@ const OtherProfile = () => {
 
 
                         <Text style={[styles.boldStyle, { top: -20, paddingLeft: 0 }]}>{item?.comments?.length}</Text>
+
+                        {item?.contentType === "Video" && (
+                            <>
+                                <Image tintColor={'black'} style={{  top: -20 }}
+                                    source={require('../../../assets/images/eye.png')} />
+                                <Text style={[styles.boldStyle, {  top: -20, paddingLeft: 0  }]}>{item?.viewCount}</Text>
+                            </>
+                        )}
 
                     </View>
 

@@ -3,7 +3,7 @@ import {
     Image, Platform, ScrollView, StyleSheet, Text, AppState,
     TextInput, TouchableOpacity, View, StatusBar, FlatList, SafeAreaView, Alert, BackHandler, RefreshControl
 } from "react-native"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import ColorCode from "../../../constants/Styles";
@@ -35,6 +35,7 @@ const Home = () => {
     const [showImage, setShowImage] = useState(false)
     const [likes, setLikes]=useState<any>([])
     // console.log("pofileData---->",pofileData,"pofileData---->")
+    const videoPlayerRefs = useRef({}); // To store references to all video players
 
     useFocusEffect(
         React.useCallback(() => {
@@ -47,7 +48,7 @@ const Home = () => {
         }, [])
     );
 
-  
+
 
 
     const homePageData = () => {
@@ -190,7 +191,7 @@ const Home = () => {
 
 
     const renderItem_didNumber = ({ item, index }: any) => {
-        //  console.log("done====>", item?.userId?.profilePicture, "item=======>",)
+    
         return (
             <View
                 style={[styles.postStyle, styles.iosShadow]}>
@@ -402,6 +403,13 @@ const Home = () => {
                             <Image style={{ top: -20 }} source={require('../../../assets/images/image_message.png')} />
                         </TouchableOpacity>
                         <Text style={[styles.boldStyle, { top: -20, paddingLeft: 0 }]}>{item?.comments?.length}</Text>
+                        {item?.contentType === "Video" && (
+                            <>
+                                <Image tintColor={'black'} style={{ top: -20 }}
+                                    source={require('../../../assets/images/eye.png')} />
+                                <Text style={[styles.boldStyle, { top: -20, paddingLeft: 0 }]}>{item?.viewCount}</Text>
+                            </>
+                        )}
                         {/* <Image style={{ top: -20 }} source={item?.ShareImage} /> */}
                     </View>
                     {/* <Image style={{ top: -20 }} source={item?.SaveImage} /> */}

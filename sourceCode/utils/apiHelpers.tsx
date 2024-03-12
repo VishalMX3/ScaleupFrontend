@@ -1,6 +1,6 @@
 import { Store } from "../redux";
 import { apiClient, apiUploadDataClient } from "./api";
-import { ADDCOMMENT, ALLCONTENT, ATHOTP, AUTHRESET, BASE_URL, BLOCKUSERLIST, CHAGEPASSWORD, COMMENTPRIVLAGE, CONTENTCREATE, CONTENTDETAIL, CONTENTVERIFY, DELETE, DELETEACCOUNT, EDUCATIONDETAIL, FOLLOWUNFOLLOW, FOLLOWUSER, GET_METHOD, HOMEPAGE, LIKEREQUEST, MARKREAD, NTIFICATION, OTPPASSWORD, OTPVERIFY, POST_METHOD, PROFILE, PUTMETHOD, REGISTER, SEARCHUSER, SIGNIN, UNFOLLOW, UNLIKEREQUEST, USERBLOCK, USERCERTIFICATION, USERCOURSES, USERPROFILE, USERUNBLOCK, VERIFICATION, WORKEXPERIENCE, DELETECONTENT } from "./apiConstant";
+import { ADDCOMMENT, ALLCONTENT, ATHOTP, AUTHRESET, BASE_URL, BLOCKUSERLIST, CHAGEPASSWORD, COMMENTPRIVLAGE, CONTENTCREATE, CONTENTDETAIL, CONTENTVERIFY, DELETE, DELETEACCOUNT, EDUCATIONDETAIL, FOLLOWUNFOLLOW, FOLLOWUSER, GET_METHOD, HOMEPAGE, LIKEREQUEST, MARKREAD, NTIFICATION, OTPPASSWORD, OTPVERIFY, POST_METHOD, PROFILE, PUTMETHOD, REGISTER, SEARCHUSER, SIGNIN, UNFOLLOW, UNLIKEREQUEST, USERBLOCK, USERCERTIFICATION, USERCOURSES, USERPROFILE, USERUNBLOCK, VERIFICATION, WORKEXPERIENCE, DELETECONTENT, INCREMENT_VIEW_COUNT } from "./apiConstant";
 
 export const registerApi = (payload) => {
     console.log("login_payload--->", payload)
@@ -82,7 +82,7 @@ export const registerApi = (payload) => {
   
   
   export const getHomePageData = (payload) => {
-    console.log( payload,"nadbsfhbdj===>")
+    //console.log( payload,"nadbsfhbdj===>")
     return apiClient({
       baseURL: BASE_URL,
       method: GET_METHOD,
@@ -366,11 +366,23 @@ export const registerApi = (payload) => {
     console.log(`Deleting content with ID: ${contentId}`);
     return apiClient({
       baseURL: BASE_URL,
-      method: DELETE, // Use the DELETE HTTP method
-      url: `${DELETECONTENT}/${contentId}`, // Assuming DELETECONTENT is the endpoint for deleting content
-      // No need to send data in the body for a DELETE request
+      method: DELETE, 
+      url: `${DELETECONTENT}/${contentId}`, 
+     
     });
   };
+
+  export const incrementViewCountApi = (contentId) => {
+    console.log(`Incrementing view count for content with ID: ${contentId}`);
+    
+    return apiClient({
+      baseURL: BASE_URL,
+      method: POST_METHOD, 
+      url: `${INCREMENT_VIEW_COUNT}/${contentId}`, 
+    });
+    
+  };
+  
   
 
 
