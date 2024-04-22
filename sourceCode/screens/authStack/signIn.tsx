@@ -100,7 +100,7 @@ const SignIn = () => {
             loginApi(data).then((res) => {
                 dispatch(setLoading(false))
                 Show_Toast(res?.data?.message)
-                // console.log(res?.data, "res?.data=======>")
+                console.log(res?.data, "res?.data=======>")
                 dispatch(setLoginUser(res?.data))
 
                 if (res?.data?.isFirstTimeLogin1) {

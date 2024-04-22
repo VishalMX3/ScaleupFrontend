@@ -37,7 +37,7 @@ const OtherProfile = () => {
     const [hasMore, setHasMore] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
 
-    // console.log(allData?.profilePicture,"allData======>", allData, "allData======>")
+     console.log("All Data" ,allData)
 
 
     useFocusEffect(
@@ -58,7 +58,7 @@ const OtherProfile = () => {
 
         
       const get = () => {
-        console.log("Fetching data for Page:", page);
+       // console.log("Fetching data for Page:", page);
         if (page === 1) setRefreshing(true);
         else dispatch(setLoading(true));
        const payload ={id:other, number:page}
@@ -110,7 +110,7 @@ const OtherProfile = () => {
 
 
     const openCoomentSection = (data) => {
-        console.log('Opening comment section for item:', data);
+       // console.log('Opening comment section for item:', data);
         setArray(data)
         setCommment(true)
     }
@@ -123,7 +123,7 @@ const OtherProfile = () => {
 
 
     const postComment = (data) => {
-        console.log('Data Sent for Comment', data);
+       // console.log('Data Sent for Comment', data);
         addComment(data).then((res) => {
             getUserData(other).then((res) => {
                 dispatch(setLoading(false))
@@ -140,7 +140,7 @@ const OtherProfile = () => {
     }
 
     const renderItem_didNumber = ({ item, index }: any) => {
-       // console.log( item);
+       // console.log("All Data", allData);
         
         return (
             <View
@@ -395,7 +395,7 @@ const OtherProfile = () => {
 
     const wantToBlock = () => {
         bockUser(allData?.userId).then((res) => {
-            console.log(res?.data, "blockuserData=====d>")
+           // console.log(res?.data, "blockuserData=====d>")
         })
     }
 

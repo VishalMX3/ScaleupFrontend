@@ -241,7 +241,7 @@ console.log( pofileData," pofileData?.user?.username====>",pofileData?.user?.use
                             value={intrust}
                             placeholder={"Enter interests comma separated "} />
 
-                        {intrust.length > 0 &&
+                        {intrust && intrust.length > 0 && (
                             <ScrollView
                                 horizontal
                                 contentContainerStyle={{alignItems:'center'}}
@@ -257,7 +257,8 @@ console.log( pofileData," pofileData?.user?.username====>",pofileData?.user?.use
                                         <Text>{interest.trim()}</Text>
                                     </TouchableOpacity>
                                 ))}
-                            </ScrollView>}
+                            </ScrollView>
+                            )}
 
 
                         <InputText
