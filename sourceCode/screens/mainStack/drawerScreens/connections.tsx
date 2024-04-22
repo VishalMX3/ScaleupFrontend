@@ -100,12 +100,12 @@ const Connections = () => {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
                 <OpacityButton
                     pressButton={() => { setType(false) }}
-                    name={"Followers-" + unFollow?.length}
+                    name={"Following-" + unFollow?.length}
                     btnTextStyle={{ color: type ? ColorCode.blue_Button_Color : ColorCode.yellowText, }}
                     button={{ width: '48%', backgroundColor: type ? ColorCode.white_Color : ColorCode.blue_Button_Color, borderColor: ColorCode.blue_Button_Color, borderWidth: 1 }} />
                 <OpacityButton
                     pressButton={() => { setType(true) }}
-                    name={"Following-" + fllow?.length}
+                    name={"Followers-" + fllow?.length}
                     btnTextStyle={{ color: !type ? ColorCode.blue_Button_Color : ColorCode.yellowText, }}
                     button={{ width: '48%', backgroundColor: !type ? ColorCode.white_Color : ColorCode.blue_Button_Color, borderColor: ColorCode.blue_Button_Color, borderWidth: 1 }} />
             </View>
